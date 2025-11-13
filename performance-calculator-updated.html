@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutra Organics - Brand Campaign Uplift Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .panel h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .input-group input[type="number"],
+        .input-group input[type="range"],
+        .input-group select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input[type="number"]:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-group input[type="range"] {
+            padding: 0;
+            height: 6px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .range-value {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #667eea;
+            min-width: 50px;
+        }
+
+        .helper-text {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .metric-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+
+        .metric-card .metric-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .metric-card .metric-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .metric-card .metric-subtext {
+            font-size: 0.85em;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .funnel-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .funnel-stage {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .funnel-stage:last-child {
+            margin-bottom: 0;
+        }
+
+        .funnel-stage h4 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            opacity: 0.95;
+        }
+
+        .funnel-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .funnel-metric {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        .funnel-metric .label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .funnel-metric .value {
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        .funnel-arrow {
+            text-align: center;
+            font-size: 2em;
+            color: rgba(255,255,255,0.5);
+            margin: -5px 0;
+        }
+
+        .channel-breakdown {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .channel-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .channel-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .channel-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .channel-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9em;
+        }
+
+        .channel-stat {
+            color: #666;
+        }
+
+        .channel-stat strong {
+            color: #667eea;
+        }
+
+        .scenario-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-tab {
+            flex: 1;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .scenario-tab:hover {
+            border-color: #667eea;
+        }
+
+        .scenario-tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .results-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .results-summary h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+
+        .result-highlight {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+        }
+
+        .result-label {
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .result-mega {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .info-box h4 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #333;
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 1200px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .channel-stats {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            background: white;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🦴 Nutra Organics Brand Campaign Uplift Calculator</h1>
+            <p>Bone Broth Campaign: May - August 2026 | $1.5M Investment</p>
+        </header>
+
+        <div class="content">
+            <!-- SECTION 1: SCENARIOS -->
+            <div class="section">
+                <div class="section-title">
+                    <span>🎯</span> Select Campaign Scenario
+                </div>
+                <div class="scenario-tabs">
+                    <div class="scenario-tab" data-scenario="conservative" onclick="setScenario('conservative')">
+                        <strong>Conservative</strong><br>
+                        <small>Cautious execution</small>
+                    </div>
+                    <div class="scenario-tab active" data-scenario="realistic" onclick="setScenario('realistic')">
+                        <strong>Realistic</strong><br>
+                        <small>Expected outcome</small>
+                    </div>
+                    <div class="scenario-tab" data-scenario="optimistic" onclick="setScenario('optimistic')">
+                        <strong>Optimistic</strong><br>
+                        <small>Strong execution</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: BASELINE INPUTS -->
+            <div class="section">
+                <div class="section-title">
+                    <span>📊</span> Baseline Metrics
+                </div>
+                <div class="grid-4">
+                    <div class="input-group">
+                        <label for="baseRevenue">Base Revenue (May-Aug)</label>
+                        <input type="number" id="baseRevenue" value="8400000" step="100000">
+                        <div class="helper-text">Revenue without campaign</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="siteVisitors">Site Visitors (May-Aug)</label>
+                        <input type="number" id="siteVisitors" value="1100000" step="10000">
+                        <div class="helper-text">Actual: 1.1M visits (May-Aug 2024)</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="conversionRate">Current CVR (%)</label>
+                        <input type="number" id="conversionRate" value="3.5" step="0.1" min="0" max="10">
+                        <div class="helper-text">Purchase rate</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="aov">Average Order Value ($)</label>
+                        <input type="number" id="aov" value="22.40" step="0.10">
+                        <div class="helper-text">Per transaction</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: BTL PERFORMANCE (BASELINE) -->
+            <div class="section">
+                <div class="section-title">
+                    <span>📊</span> BTL Channel Performance (May-Aug Baseline)
+                </div>
+                <div class="info-box">
+                    <h4>Below-the-Line Marketing Baseline</h4>
+                    <p>Actual BTL performance from May-Aug 2024 period. Total BTL spend: $900K. This represents your baseline marketing efficiency before brand campaign uplift.</p>
+                </div>
+                <div class="grid-3">
+                    <div class="panel">
+                        <h3>Meta Ads</h3>
+                        <div class="input-group">
+                            <label for="metaBudget">Budget ($)</label>
+                            <input type="number" id="metaBudget" value="200000" step="10000">
+                        </div>
+                        <div class="input-group">
+                            <label for="metaROAS">ROAS</label>
+                            <input type="number" id="metaROAS" value="3.0" step="0.1">
+                        </div>
+                        <div class="metric-card" style="margin-top: 15px;">
+                            <div class="metric-label">Revenue Generated</div>
+                            <div class="metric-value" id="metaRevenue">$600K</div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Google Ads</h3>
+                        <div class="input-group">
+                            <label for="googleBudget">Budget ($)</label>
+                            <input type="number" id="googleBudget" value="250000" step="10000">
+                        </div>
+                        <div class="input-group">
+                            <label for="googleROAS">ROAS</label>
+                            <input type="number" id="googleROAS" value="6.7" step="0.1">
+                        </div>
+                        <div class="metric-card" style="margin-top: 15px;">
+                            <div class="metric-label">Revenue Generated</div>
+                            <div class="metric-value" id="googleRevenue">$1.68M</div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Email Marketing</h3>
+                        <div class="input-group">
+                            <label for="emailBudget">Budget ($)</label>
+                            <input type="number" id="emailBudget" value="30000" step="1000">
+                        </div>
+                        <div class="input-group">
+                            <label for="emailROI">ROI (Return Multiple)</label>
+                            <input type="number" id="emailROI" value="62" step="1">
+                        </div>
+                        <div class="metric-card" style="margin-top: 15px;">
+                            <div class="metric-label">Revenue Generated</div>
+                            <div class="metric-value" id="emailRevenue">$1.86M</div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Influencers</h3>
+                        <div class="input-group">
+                            <label for="influencerBudget">Budget ($)</label>
+                            <input type="number" id="influencerBudget" value="150000" step="10000">
+                        </div>
+                        <div class="input-group">
+                            <label for="influencerROAS">ROAS</label>
+                            <input type="number" id="influencerROAS" value="1.5" step="0.1">
+                        </div>
+                        <div class="metric-card" style="margin-top: 15px;">
+                            <div class="metric-label">Revenue Generated</div>
+                            <div class="metric-value" id="influencerRevenue">$225K</div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Trade Marketing</h3>
+                        <div class="input-group">
+                            <label for="tradeBudget">Budget ($)</label>
+                            <input type="number" id="tradeBudget" value="150000" step="10000">
+                        </div>
+                        <div class="helper-text">No trackable ROAS - brand building activity</div>
+                        <div class="metric-card" style="margin-top: 15px;">
+                            <div class="metric-label">Est. Revenue</div>
+                            <div class="metric-value" id="tradeRevenue">N/A</div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>WW Retail Media</h3>
+                        <div class="input-group">
+                            <label for="wwBudget">Budget ($)</label>
+                            <input type="number" id="wwBudget" value="120000" step="10000">
+                        </div>
+                        <div class="helper-text">No reliable ROAS data available</div>
+                        <div class="metric-card" style="margin-top: 15px;">
+                            <div class="metric-label">Est. Revenue</div>
+                            <div class="metric-value" id="wwRevenue">N/A</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BTL Summary -->
+                <div style="margin-top: 30px;" class="grid-4">
+                    <div class="metric-card">
+                        <div class="metric-label">Total BTL Spend</div>
+                        <div class="metric-value" id="totalBTLSpend">$900K</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Trackable BTL Revenue</div>
+                        <div class="metric-value" id="trackableBTLRevenue">$4.36M</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Blended BTL ROAS</div>
+                        <div class="metric-value" id="blendedBTLROAS">4.84x</div>
+                        <div class="metric-subtext">Trackable channels only</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Untracked Spend</div>
+                        <div class="metric-value" id="untrackedSpend">$270K</div>
+                        <div class="metric-subtext">Trade + WW</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 8: MEDIA DELIVERY -->
+            <div class="section">
+                <div class="section-title">
+                    <span>📡</span> Media Delivery Overview
+                </div>
+                <div class="grid-4">
+                    <div class="metric-card">
+                        <div class="metric-label">Total Investment</div>
+                        <div class="metric-value" id="displayTotalInvestment">$1.5M</div>
+                        <div class="metric-subtext">Brand campaign</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Unique Reach</div>
+                        <div class="metric-value" id="displayUniqueReach">1.2M</div>
+                        <div class="metric-subtext">People reached</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Average Frequency</div>
+                        <div class="metric-value" id="displayAvgFrequency">9x</div>
+                        <div class="metric-subtext">Times seen</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Total Impressions</div>
+                        <div class="metric-value" id="displayTotalImpressions">11.3M</div>
+                        <div class="metric-subtext">Ad exposures</div>
+                    </div>
+                </div>
+
+                <div class="panel" style="margin-top: 20px;">
+                    <h3>Channel Breakdown</h3>
+                    <div class="channel-breakdown">
+                        <div class="channel-item">
+                            <div class="channel-name">Premium BVOD</div>
+                            <div class="channel-stats">
+                                <span class="channel-stat">Budget: <strong>$91K</strong></span>
+                                <span class="channel-stat">Reach: <strong>770K</strong></span>
+                                <span class="channel-stat">Freq: <strong>8x</strong></span>
+                                <span class="channel-stat">Imps: <strong>1.79M</strong></span>
+                            </div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="channel-name">Programmatic CTV</div>
+                            <div class="channel-stats">
+                                <span class="channel-stat">Budget: <strong>$325K</strong></span>
+                                <span class="channel-stat">Reach: <strong>770K</strong></span>
+                                <span class="channel-stat">Freq: <strong>8x</strong></span>
+                                <span class="channel-stat">Imps: <strong>5.7M</strong></span>
+                            </div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="channel-name">Programmatic OOH</div>
+                            <div class="channel-stats">
+                                <span class="channel-stat">Budget: <strong>$175K</strong></span>
+                                <span class="channel-stat">Reach: <strong>193K</strong></span>
+                                <span class="channel-stat">Freq: <strong>10x</strong></span>
+                                <span class="channel-stat">Imps: <strong>1.7M</strong></span>
+                            </div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="channel-name">Audio/Podcasts</div>
+                            <div class="channel-stats">
+                                <span class="channel-stat">Budget: <strong>$100K</strong></span>
+                                <span class="channel-stat">Reach: <strong>601K</strong></span>
+                                <span class="channel-stat">Freq: <strong>3x</strong></span>
+                                <span class="channel-stat">Imps: <strong>1.65M</strong></span>
+                            </div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="channel-name">Sampling</div>
+                            <div class="channel-stats">
+                                <span class="channel-stat">Budget: <strong>$481K</strong></span>
+                                <span class="channel-stat">Reach: <strong>500K</strong></span>
+                                <span class="channel-stat">Units: <strong>500K</strong></span>
+                                <span class="channel-stat">Locations: <strong>Syd/Mel/Bris</strong></span>
+                            </div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="channel-name">Premium Media (Station Dom + Westfield)</div>
+                            <div class="channel-stats">
+                                <span class="channel-stat">Budget: <strong>$179K</strong></span>
+                                <span class="channel-stat">Focus: <strong>Flinders St + Westfield</strong></span>
+                            </div>
+                        </div>
+                        <div class="channel-item">
+                            <div class="channel-name">Content Partnerships (Broadsheet + Linkby)</div>
+                            <div class="channel-stats">
+                                <span class="channel-stat">Budget: <strong>$200K</strong></span>
+                                <span class="channel-stat">Content: <strong>Editorial + Social</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 8: CAMPAIGN ASSUMPTIONS -->
+            <div class="section">
+                <div class="section-title">
+                    <span>⚙️</span> Campaign Performance Assumptions
+                </div>
+                <div class="grid-3">
+                    <div class="panel">
+                        <h3>Awareness & Traffic</h3>
+                        <div class="input-group">
+                            <label for="attentionRate">Attention Rate (%)
+                                <span class="range-value" id="attentionRateValue">45%</span>
+                            </label>
+                            <input type="range" id="attentionRate" min="20" max="70" value="45" step="5" oninput="updateRangeValue('attentionRate')">
+                            <div class="helper-text">% who actually notice ads</div>
+                        </div>
+                        <div class="input-group">
+                            <label for="trafficLift">Traffic Lift (%)
+                                <span class="range-value" id="trafficLiftValue">25%</span>
+                            </label>
+                            <input type="range" id="trafficLift" min="0" max="50" value="25" step="1" oninput="updateRangeValue('trafficLift')">
+                            <div class="helper-text">Website visit increase</div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Conversion Impact</h3>
+                        <div class="input-group">
+                            <label for="cvrLift">CVR Lift (pp)
+                                <span class="range-value" id="cvrLiftValue">0.3</span>
+                            </label>
+                            <input type="range" id="cvrLift" min="0" max="1.5" value="0.3" step="0.1" oninput="updateRangeValue('cvrLift')">
+                            <div class="helper-text">Purchase rate improvement</div>
+                        </div>
+                        <div class="input-group">
+                            <label for="brandSearchLift">Brand Search Lift (%)
+                                <span class="range-value" id="brandSearchLiftValue">35%</span>
+                            </label>
+                            <input type="range" id="brandSearchLift" min="0" max="100" value="35" step="5" oninput="updateRangeValue('brandSearchLift')">
+                            <div class="helper-text">Increase in branded searches</div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Sampling Performance</h3>
+                        <div class="input-group">
+                            <label for="samplingConversion">Conversion Rate (%)
+                                <span class="range-value" id="samplingConversionValue">20%</span>
+                            </label>
+                            <input type="range" id="samplingConversion" min="0" max="40" value="20" step="1" oninput="updateRangeValue('samplingConversion')">
+                            <div class="helper-text">% who sample & purchase</div>
+                        </div>
+                        <div class="input-group">
+                            <label for="samplingDistribution">In-Period Distribution (%)
+                                <span class="range-value" id="samplingDistributionValue">30%</span>
+                            </label>
+                            <input type="range" id="samplingDistribution" min="0" max="100" value="30" step="5" oninput="updateRangeValue('samplingDistribution')">
+                            <div class="helper-text">% distributed May-Aug</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 8: THE FUNNEL -->
+            <div class="section">
+                <div class="section-title">
+                    <span>🔄</span> Campaign Funnel: From Reach to Revenue
+                </div>
+                <div class="funnel-container">
+                    <!-- Stage 1: Reach -->
+                    <div class="funnel-stage">
+                        <h4>📡 Stage 1: Media Reach</h4>
+                        <div class="funnel-metrics">
+                            <div class="funnel-metric">
+                                <div class="label">Unique Reach</div>
+                                <div class="value" id="funnelReach">1.2M</div>
+                            </div>
+                            <div class="funnel-metric">
+                                <div class="label">% of Target (2.2M)</div>
+                                <div class="value" id="funnelReachPercent">55%</div>
+                            </div>
+                            <div class="funnel-metric">
+                                <div class="label">Total Impressions</div>
+                                <div class="value" id="funnelImpressions">11.3M</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="funnel-arrow">↓</div>
+
+                    <!-- Stage 2: Awareness -->
+                    <div class="funnel-stage">
+                        <h4>👁️ Stage 2: Brand Awareness</h4>
+                        <div class="funnel-metrics">
+                            <div class="funnel-metric">
+                                <div class="label">People Who Notice</div>
+                                <div class="value" id="funnelAwareness">540K</div>
+                            </div>
+                            <div class="funnel-metric">
+                                <div class="label">Awareness Lift</div>
+                                <div class="value" id="funnelAwarenessLift">+20%</div>
+                            </div>
+                            <div class="funnel-metric">
+                                <div class="label">New Awareness</div>
+                                <div class="value" id="funnelNewAwareness">32% → 38%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="funnel-arrow">↓</div>
+
+                    <!-- Stage 3: Consideration -->
+                    <div class="funnel-stage">
+                        <h4>🤔 Stage 3: Consideration & Traffic</h4>
+                        <div class="funnel-metrics">
+                            <div class="funnel-metric">
+                                <div class="label">Considering Purchase</div>
+                                <div class="value" id="funnelConsideration">162K</div>
+                            </div>
+                            <div class="funnel-metric">
+                                <div class="label">Additional Site Visits</div>
+                                <div class="value" id="funnelTraffic">2.7M</div>
+                            </div>
+                            <div class="funnel-metric">
+                                <div class="label">Brand Searches</div>
+                                <div class="value" id="funnelSearches">+35%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="funnel-arrow">↓</div>
+
+                    <!-- Stage 4: Conversion -->
+                    <div class="funnel-stage">
+                        <h4>🛒 Stage 4: Purchase & Conversion</h4>
+                        <div class="funnel-metrics">
+                            <div class="funnel-metric">
+                                <div class="label">New Customers</div>
+                                <div class="value" id="funnelNewCustomers">43K</div>
+                            </div>
+                            <div class="funnel-metric">
+                                <div class="label">Improved CVR</div>
+                                <div class="value" id="funnelCVR">3.5% → 3.8%</div>
+                            </div>
+                            <div class="funnel-metric">
+                                <div class="label">Sampling Conversions</div>
+                                <div class="value" id="funnelSamplingConv">30K</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="funnel-arrow">↓</div>
+
+                    <!-- Stage 5: Revenue -->
+                    <div class="funnel-stage" style="background: rgba(255,255,255,0.2);">
+                        <h4>💰 Stage 5: Revenue Impact</h4>
+                        <div class="result-mega" id="funnelRevenue">$1.6M</div>
+                        <div style="text-align: center; opacity: 0.9;">Incremental Revenue</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 8: REVENUE BREAKDOWN -->
+            <div class="section">
+                <div class="section-title">
+                    <span>💰</span> Revenue Impact Breakdown
+                </div>
+                <div class="grid-3">
+                    <div class="panel">
+                        <h3>1. Traffic Lift</h3>
+                        <div class="metric-card" style="margin-bottom: 15px;">
+                            <div class="metric-value" id="resultTrafficRevenue">$0</div>
+                            <div class="metric-subtext">From brand awareness</div>
+                        </div>
+                        <p style="font-size: 0.9em; color: #666; line-height: 1.5;">
+                            Brand campaign drives more website visits through increased awareness, branded search, and direct traffic.
+                        </p>
+                    </div>
+
+                    <div class="panel">
+                        <h3>2. CVR Improvement</h3>
+                        <div class="metric-card" style="margin-bottom: 15px;">
+                            <div class="metric-value" id="resultCVRRevenue">$0</div>
+                            <div class="metric-subtext">From brand trust</div>
+                        </div>
+                        <p style="font-size: 0.9em; color: #666; line-height: 1.5;">
+                            Brand familiarity increases trust, reducing friction and improving conversion rates across all traffic sources.
+                        </p>
+                    </div>
+
+                    <div class="panel">
+                        <h3>3. Sampling Direct</h3>
+                        <div class="metric-card" style="margin-bottom: 15px;">
+                            <div class="metric-value" id="resultSamplingRevenue">$0</div>
+                            <div class="metric-subtext">From trial conversions</div>
+                        </div>
+                        <p style="font-size: 0.9em; color: #666; line-height: 1.5;">
+                            Direct product trial at Westfield, festivals, and events drives immediate purchase conversions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 8: FINAL RESULTS -->
+            <div class="results-summary">
+                <h3>📊 Campaign Performance Summary</h3>
+                
+                <div class="result-highlight">
+                    <div class="result-row">
+                        <span class="result-label">Base Revenue (no campaign):</span>
+                        <span class="result-value" id="resultBaseRevenue">$8,400,000</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Total Incremental Revenue:</span>
+                        <span class="result-value" id="resultIncrementalRevenue">$0</span>
+                    </div>
+                    <div class="result-row" style="background: rgba(255,255,255,0.2); font-size: 1.2em;">
+                        <span class="result-label">Total Revenue (with campaign):</span>
+                        <span class="result-value" id="resultTotalRevenue">$0</span>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="gap: 15px;">
+                    <div class="result-highlight">
+                        <h4 style="margin-bottom: 15px; opacity: 0.9;">vs $10M Target</h4>
+                        <div class="result-mega" id="resultVsTarget" style="font-size: 2em;">$0</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="result-highlight">
+                        <h4 style="margin-bottom: 15px; opacity: 0.9;">Return Metrics</h4>
+                        <div class="result-row">
+                            <span class="result-label">Campaign ROAS:</span>
+                            <span class="result-value" id="resultROAS">0.00x</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Incremental Profit:</span>
+                            <span class="result-value" id="resultProfit">$0</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">Profit ROAS:</span>
+                            <span class="result-value" id="resultBlendedROAS">0.00x</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 9: TOTAL MARKETING PERFORMANCE (ATL + BTL) -->
+            <div class="section">
+                <div class="section-title">
+                    <span>🎯</span> Total Marketing Performance (Brand Campaign + BTL)
+                </div>
+                <div class="info-box">
+                    <h4>Combined Marketing Impact</h4>
+                    <p>This shows your total marketing effectiveness combining both the brand campaign (ATL) uplift and your baseline BTL channels. Note: Brand campaign uplift may improve BTL efficiency through halo effects not captured here.</p>
+                </div>
+                
+                <div class="grid-4">
+                    <div class="metric-card">
+                        <div class="metric-label">Total Marketing Spend</div>
+                        <div class="metric-value" id="totalMarketingSpend">$2.4M</div>
+                        <div class="metric-subtext">ATL $1.5M + BTL $900K</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Total Attributed Revenue</div>
+                        <div class="metric-value" id="totalAttributedRevenue">$0</div>
+                        <div class="metric-subtext">Brand + BTL channels</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Blended ROAS</div>
+                        <div class="metric-value" id="overallBlendedROAS">0.00x</div>
+                        <div class="metric-subtext">Total revenue / total spend</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Marketing Efficiency</div>
+                        <div class="metric-value" id="marketingEfficiency">0%</div>
+                        <div class="metric-subtext">Revenue from marketing</div>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top: 20px;">
+                    <div class="panel">
+                        <h3>Channel Mix</h3>
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+                                <strong>Brand Campaign (ATL)</strong>
+                                <span id="atlSpendPercent">62.5%</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+                                <strong>Below-the-Line (BTL)</strong>
+                                <span id="btlSpendPercent">37.5%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Revenue Attribution</h3>
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+                                <strong>Brand Campaign Lift</strong>
+                                <span id="atlRevenueAmount">$0</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+                                <strong>BTL Channels</strong>
+                                <span id="btlRevenueAmount">$0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 10: KEY ASSUMPTIONS -->
+            <div class="section">
+                <div class="info-box">
+                    <h4>📋 Key Model Assumptions & Methodology</h4>
+                    <p>
+                        <strong>This model calculates uplift through a five-stage funnel:</strong><br><br>
+                        
+                        <strong>1. Media Reach:</strong> Based on actual media plan delivering 1.2M unique reach across BVOD, CTV, OOH, Audio, and Sampling<br>
+                        
+                        <strong>2. Brand Awareness:</strong> Attention rate (default 45%) determines how many people actually notice the campaign. Industry benchmark: 40-50% for premium media.<br>
+                        
+                        <strong>3. Consideration:</strong> Of those aware, 30% move into active consideration (informed by awareness-to-consideration ratios from IPA Databank)<br>
+                        
+                        <strong>4. Traffic & Conversion:</strong> Brand awareness drives website traffic lift AND improves conversion rates through increased trust and familiarity<br>
+                        
+                        <strong>5. Revenue Impact:</strong> Three sources combine - traffic lift, CVR improvement, and direct sampling conversions<br><br>
+                        
+                        <strong>Attribution Note:</strong> Some overlap exists between traffic and CVR sources (brand awareness impacts both). The model shows gross impact; net impact may be 10-15% lower due to attribution overlap.<br><br>
+                        
+                        <strong>Time Lag:</strong> This shows in-period impact (May-Aug 2026). Brand awareness built will continue driving sales in subsequent months, with estimated 6-12 month halo effect worth an additional 30-50% of in-period impact.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const TARGET_AUDIENCE = 2200000;
+        const GROSS_MARGIN = 0.62;
+        const BRAND_SPEND = 1500000;
+        
+        // Media plan data
+        const mediaData = {
+            uniqueReach: 1200000,
+            avgFrequency: 9.4,
+            totalImpressions: 11300000,
+            samplingUnits: 500000
+        };
+
+        // Scenario presets
+        const scenarios = {
+            conservative: {
+                attentionRate: 35,
+                trafficLift: 15,
+                cvrLift: 0.2,
+                brandSearchLift: 25,
+                samplingConversion: 15,
+                samplingDistribution: 25
+            },
+            realistic: {
+                attentionRate: 45,
+                trafficLift: 25,
+                cvrLift: 0.3,
+                brandSearchLift: 35,
+                samplingConversion: 20,
+                samplingDistribution: 30
+            },
+            optimistic: {
+                attentionRate: 55,
+                trafficLift: 35,
+                cvrLift: 0.5,
+                brandSearchLift: 50,
+                samplingConversion: 25,
+                samplingDistribution: 40
+            }
+        };
+
+        // Set scenario
+        function setScenario(scenario) {
+            document.querySelectorAll('.scenario-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-scenario="${scenario}"]`).classList.add('active');
+
+            const values = scenarios[scenario];
+            document.getElementById('attentionRate').value = values.attentionRate;
+            document.getElementById('trafficLift').value = values.trafficLift;
+            document.getElementById('cvrLift').value = values.cvrLift;
+            document.getElementById('brandSearchLift').value = values.brandSearchLift;
+            document.getElementById('samplingConversion').value = values.samplingConversion;
+            document.getElementById('samplingDistribution').value = values.samplingDistribution;
+
+            updateRangeValue('attentionRate');
+            updateRangeValue('trafficLift');
+            updateRangeValue('cvrLift');
+            updateRangeValue('brandSearchLift');
+            updateRangeValue('samplingConversion');
+            updateRangeValue('samplingDistribution');
+
+            calculate();
+        }
+
+        // Update range value display
+        function updateRangeValue(id) {
+            const input = document.getElementById(id);
+            const display = document.getElementById(id + 'Value');
+            let value = parseFloat(input.value);
+            
+            if (id === 'cvrLift') {
+                display.textContent = value.toFixed(1);
+            } else {
+                display.textContent = value + '%';
+            }
+            
+            calculate();
+        }
+
+        // Format functions
+        function formatCurrency(value) {
+            if (value >= 1000000) {
+                return '$' + (value / 1000000).toFixed(1) + 'M';
+            }
+            return '$' + Math.round(value).toLocaleString();
+        }
+
+        function formatNumber(value) {
+            if (value >= 1000000) {
+                return (value / 1000000).toFixed(1) + 'M';
+            }
+            if (value >= 1000) {
+                return Math.round(value / 1000) + 'K';
+            }
+            return Math.round(value).toLocaleString();
+        }
+
+        function formatPercent(value) {
+            return value.toFixed(1) + '%';
+        }
+
+        // Calculate results
+        function calculate() {
+            // BTL CHANNEL CALCULATIONS
+            const metaBudget = parseFloat(document.getElementById('metaBudget').value) || 0;
+            const metaROAS = parseFloat(document.getElementById('metaROAS').value) || 0;
+            const metaRevenue = metaBudget * metaROAS;
+            
+            const googleBudget = parseFloat(document.getElementById('googleBudget').value) || 0;
+            const googleROAS = parseFloat(document.getElementById('googleROAS').value) || 0;
+            const googleRevenue = googleBudget * googleROAS;
+            
+            const emailBudget = parseFloat(document.getElementById('emailBudget').value) || 0;
+            const emailROI = parseFloat(document.getElementById('emailROI').value) || 0;
+            const emailRevenue = emailBudget * emailROI;
+            
+            const influencerBudget = parseFloat(document.getElementById('influencerBudget').value) || 0;
+            const influencerROAS = parseFloat(document.getElementById('influencerROAS').value) || 0;
+            const influencerRevenue = influencerBudget * influencerROAS;
+            
+            const tradeBudget = parseFloat(document.getElementById('tradeBudget').value) || 0;
+            const wwBudget = parseFloat(document.getElementById('wwBudget').value) || 0;
+            
+            // BTL Summary
+            const totalBTLSpend = metaBudget + googleBudget + emailBudget + influencerBudget + tradeBudget + wwBudget;
+            const trackableBTLRevenue = metaRevenue + googleRevenue + emailRevenue + influencerRevenue;
+            const trackableBTLSpend = metaBudget + googleBudget + emailBudget + influencerBudget;
+            const blendedBTLROAS = trackableBTLSpend > 0 ? trackableBTLRevenue / trackableBTLSpend : 0;
+            const untrackedSpend = tradeBudget + wwBudget;
+            
+            // Update BTL displays
+            document.getElementById('metaRevenue').textContent = formatCurrency(metaRevenue);
+            document.getElementById('googleRevenue').textContent = formatCurrency(googleRevenue);
+            document.getElementById('emailRevenue').textContent = formatCurrency(emailRevenue);
+            document.getElementById('influencerRevenue').textContent = formatCurrency(influencerRevenue);
+            document.getElementById('totalBTLSpend').textContent = formatCurrency(totalBTLSpend);
+            document.getElementById('trackableBTLRevenue').textContent = formatCurrency(trackableBTLRevenue);
+            document.getElementById('blendedBTLROAS').textContent = blendedBTLROAS.toFixed(2) + 'x';
+            document.getElementById('untrackedSpend').textContent = formatCurrency(untrackedSpend);
+            
+            // Get baseline inputs
+            const baseRevenue = parseFloat(document.getElementById('baseRevenue').value);
+            const siteVisitors = parseFloat(document.getElementById('siteVisitors').value);
+            const conversionRate = parseFloat(document.getElementById('conversionRate').value);
+            const aov = parseFloat(document.getElementById('aov').value);
+            
+            const attentionRate = parseFloat(document.getElementById('attentionRate').value) / 100;
+            const trafficLift = parseFloat(document.getElementById('trafficLift').value) / 100;
+            const cvrLift = parseFloat(document.getElementById('cvrLift').value) / 100;
+            const brandSearchLift = parseFloat(document.getElementById('brandSearchLift').value) / 100;
+            const samplingConversion = parseFloat(document.getElementById('samplingConversion').value) / 100;
+            const samplingDistribution = parseFloat(document.getElementById('samplingDistribution').value) / 100;
+
+            // FUNNEL CALCULATIONS
+            
+            // Stage 1: Reach
+            const uniqueReach = mediaData.uniqueReach;
+            const reachPercent = (uniqueReach / TARGET_AUDIENCE) * 100;
+            
+            // Stage 2: Awareness
+            const peopleAware = uniqueReach * attentionRate;
+            const awarenessLift = 20; // Fixed at +20% for now
+            const baseAwareness = 32;
+            const newAwareness = baseAwareness + awarenessLift;
+            
+            // Stage 3: Consideration
+            const peopleConsidering = peopleAware * 0.30; // 30% move to consideration
+            const additionalTraffic = siteVisitors * trafficLift;
+            
+            // Stage 4: Conversion
+            const newCustomers = peopleConsidering * 0.08; // 8% conversion from consideration
+            const newCVR = conversionRate + (cvrLift * 100);
+            const samplesDistributed = mediaData.samplingUnits * samplingDistribution;
+            const samplingConversions = samplesDistributed * samplingConversion;
+            
+            // REVENUE CALCULATIONS
+            
+            // 1. Traffic Lift Revenue
+            const trafficRevenue = additionalTraffic * (conversionRate / 100) * aov;
+            
+            // 2. CVR Lift Revenue (on baseline + new traffic)
+            const totalVisitors = siteVisitors + additionalTraffic;
+            const cvrRevenue = totalVisitors * cvrLift * aov;
+            
+            // 3. Sampling Revenue
+            const samplingRevenue = samplingConversions * aov;
+            
+            // Total
+            const incrementalRevenue = trafficRevenue + cvrRevenue + samplingRevenue;
+            const totalRevenue = baseRevenue + incrementalRevenue;
+            
+            // Profitability
+            const incrementalProfit = incrementalRevenue * GROSS_MARGIN;
+            const roas = incrementalRevenue / BRAND_SPEND;
+            const blendedROAS = incrementalProfit / BRAND_SPEND;
+            
+            // vs Target
+            const target = 10000000;
+            const vsTarget = totalRevenue - target;
+            const progressPercent = (totalRevenue / target) * 100;
+
+            // UPDATE DISPLAYS
+            
+            // Media overview (static)
+            document.getElementById('displayTotalInvestment').textContent = '$1.5M';
+            document.getElementById('displayUniqueReach').textContent = formatNumber(uniqueReach);
+            document.getElementById('displayAvgFrequency').textContent = mediaData.avgFrequency.toFixed(1) + 'x';
+            document.getElementById('displayTotalImpressions').textContent = formatNumber(mediaData.totalImpressions);
+            
+            // Funnel stages
+            document.getElementById('funnelReach').textContent = formatNumber(uniqueReach);
+            document.getElementById('funnelReachPercent').textContent = reachPercent.toFixed(0) + '%';
+            document.getElementById('funnelImpressions').textContent = formatNumber(mediaData.totalImpressions);
+            
+            document.getElementById('funnelAwareness').textContent = formatNumber(peopleAware);
+            document.getElementById('funnelAwarenessLift').textContent = '+' + awarenessLift + '%';
+            document.getElementById('funnelNewAwareness').textContent = baseAwareness + '% → ' + newAwareness + '%';
+            
+            document.getElementById('funnelConsideration').textContent = formatNumber(peopleConsidering);
+            document.getElementById('funnelTraffic').textContent = formatNumber(additionalTraffic);
+            document.getElementById('funnelSearches').textContent = '+' + (brandSearchLift * 100).toFixed(0) + '%';
+            
+            document.getElementById('funnelNewCustomers').textContent = formatNumber(newCustomers);
+            document.getElementById('funnelCVR').textContent = conversionRate.toFixed(1) + '% → ' + newCVR.toFixed(1) + '%';
+            document.getElementById('funnelSamplingConv').textContent = formatNumber(samplingConversions);
+            
+            document.getElementById('funnelRevenue').textContent = formatCurrency(incrementalRevenue);
+            
+            // Revenue breakdown
+            document.getElementById('resultTrafficRevenue').textContent = formatCurrency(trafficRevenue);
+            document.getElementById('resultCVRRevenue').textContent = formatCurrency(cvrRevenue);
+            document.getElementById('resultSamplingRevenue').textContent = formatCurrency(samplingRevenue);
+            
+            // Final results
+            document.getElementById('resultBaseRevenue').textContent = formatCurrency(baseRevenue);
+            document.getElementById('resultIncrementalRevenue').textContent = formatCurrency(incrementalRevenue);
+            document.getElementById('resultTotalRevenue').textContent = formatCurrency(totalRevenue);
+            
+            const vsTargetElement = document.getElementById('resultVsTarget');
+            if (vsTarget >= 0) {
+                vsTargetElement.textContent = '+' + formatCurrency(vsTarget);
+                vsTargetElement.style.color = '#4caf50';
+            } else {
+                vsTargetElement.textContent = formatCurrency(vsTarget);
+                vsTargetElement.style.color = '#f44336';
+            }
+            
+            document.getElementById('progressBar').style.width = Math.min(progressPercent, 100) + '%';
+            
+            document.getElementById('resultProfit').textContent = formatCurrency(incrementalProfit);
+            document.getElementById('resultROAS').textContent = roas.toFixed(2) + 'x';
+            document.getElementById('resultBlendedROAS').textContent = blendedROAS.toFixed(2) + 'x';
+            
+            // COMBINED MARKETING PERFORMANCE (ATL + BTL)
+            const totalMarketingSpend = BRAND_SPEND + totalBTLSpend;
+            const totalAttributedRevenue = incrementalRevenue + trackableBTLRevenue;
+            const overallBlendedROAS = totalMarketingSpend > 0 ? totalAttributedRevenue / totalMarketingSpend : 0;
+            const marketingEfficiencyPercent = totalRevenue > 0 ? (totalAttributedRevenue / totalRevenue) * 100 : 0;
+            
+            const atlSpendPercent = totalMarketingSpend > 0 ? (BRAND_SPEND / totalMarketingSpend) * 100 : 0;
+            const btlSpendPercent = totalMarketingSpend > 0 ? (totalBTLSpend / totalMarketingSpend) * 100 : 0;
+            
+            // Update combined performance displays
+            document.getElementById('totalMarketingSpend').textContent = formatCurrency(totalMarketingSpend);
+            document.getElementById('totalAttributedRevenue').textContent = formatCurrency(totalAttributedRevenue);
+            document.getElementById('overallBlendedROAS').textContent = overallBlendedROAS.toFixed(2) + 'x';
+            document.getElementById('marketingEfficiency').textContent = marketingEfficiencyPercent.toFixed(1) + '%';
+            
+            document.getElementById('atlSpendPercent').textContent = atlSpendPercent.toFixed(1) + '%';
+            document.getElementById('btlSpendPercent').textContent = btlSpendPercent.toFixed(1) + '%';
+            document.getElementById('atlRevenueAmount').textContent = formatCurrency(incrementalRevenue);
+            document.getElementById('btlRevenueAmount').textContent = formatCurrency(trackableBTLRevenue);
+        }
+
+        // Add event listeners
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', calculate);
+        });
+
+        // Initial calculation
+        calculate();
+    </script>
+</body>
+</html>
