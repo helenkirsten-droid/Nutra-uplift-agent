@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALCUL8R - Marketing Performance Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            padding: 20px;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header with Logos */
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            border-radius: 16px;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-left {
+            flex-shrink: 0;
+        }
+
+        .logo-right {
+            flex-shrink: 0;
+        }
+
+        .header-center {
+            flex: 1;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            color: #e0e7ff;
+            font-size: 15px;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Collapsible Section Styles */
+        .section {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e5e7eb 100%);
+            padding: 20px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+        }
+
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e3a8a;
+            letter-spacing: 0.3px;
+        }
+
+        .section-toggle {
+            font-size: 24px;
+            color: #64748b;
+            transition: transform 0.3s ease;
+        }
+
+        .section.collapsed .section-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            padding: 30px;
+            display: block;
+        }
+
+        .section.collapsed .section-content {
+            display: none;
+        }
+
+        /* Summary Styles */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .summary-stat {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+
+        .summary-stat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .summary-stat .label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .summary-stat .value {
+            font-size: 28px;
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+
+        /* Input Styles */
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+            font-size: 14px;
+            letter-spacing: 0.2px;
+        }
+
+        .input-group input[type="number"],
+        .input-group input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Slider Styles */
+        .slider-container {
+            margin-bottom: 25px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        .slider-value {
+            color: #3b82f6;
+            font-size: 16px;
+            font-weight: 700;
+            background: #eff6ff;
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #2563eb;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Scenario Pills */
+        .scenario-pills {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .scenario-pill {
+            padding: 12px 24px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .scenario-pill:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .scenario-pill.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
+            color: white;
+            border-color: #1e3a8a;
+        }
+
+        /* BTL Channel Grid */
+        .btl-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .btl-channel {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btl-channel h4 {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .btl-comparison {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .btl-before {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .btl-arrow {
+            color: #10b981;
+            font-size: 18px;
+        }
+
+        .btl-after {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* Revenue Breakdown */
+        .revenue-item {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #10b981;
+            margin-bottom: 15px;
+        }
+
+        .revenue-item h4 {
+            color: #065f46;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .revenue-item .amount {
+            font-size: 32px;
+            color: #059669;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .revenue-item .description {
+            color: #047857;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Funnel Stage */
+        .funnel-stage {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+            margin-bottom: 15px;
+        }
+
+        .funnel-stage h4 {
+            color: #1e3a8a;
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .metric {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+
+        /* Assumptions Box */
+        .assumptions-box {
+            background: #fffbeb;
+            border: 2px solid #fbbf24;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .assumptions-box h4 {
+            color: #92400e;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .assumptions-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .assumptions-box li {
+            color: #78350f;
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .assumptions-box li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #fbbf24;
+            font-weight: 700;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .logo {
+                height: 40px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btl-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario-pills {
+                flex-direction: column;
+            }
+
+            .scenario-pill {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .section {
+                break-inside: avoid;
+            }
+
+            .section-header {
+                cursor: default;
+            }
+
+            .section-content {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Logos -->
+        <div class="header">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB4YAAAJRCAYAAACp5tqsAAAKMWlDQ1BJQ0MgUHJvZmlsZQAAeJydlndUU9kWh8+9N71QkhCKlNBraFICSA29SJEuKjEJEErAkAAiNkRUcERRkaYIMijggKNDkbEiioUBUbHrBBlE1HFwFBuWSWStGd+8ee/Nm98f935rn73P3Wfvfda6AJD8gwXCTFgJgAyhWBTh58WIjYtnYAcBDPAAA2wA4HCzs0IW+EYCmQJ82IxsmRP4F726DiD5+yrTP4zBAP+flLlZIjEAUJiM5/L42VwZF8k4PVecJbdPyZi2NE3OMErOIlmCMlaTc/IsW3z2mWUPOfMyhDwZy3PO4mXw5Nwn4405Er6MkWAZF+cI+LkyviZjg3RJhkDGb+SxGXxONgAoktwu5nNTZGwtY5IoMoIt43kA4EjJX/DSL1jMzxPLD8XOzFouEiSniBkmXFOGjZMTi+HPz03ni8XMMA43jSPiMdiZGVkc4XIAZs/8WRR5bRmyIjvYODk4MG0tbb4o1H9d/JuS93aWXoR/7hlEH/jD9ld+mQ0AsKZltdn6h21pFQBd6wFQu/2HzWAvAIqyvnUOfXEeunxeUsTiLGcrq9zcXEsBn2spL+jv+p8Of0NffM9Svt3v5WF485M4knQxQ143bmZ6pkTEyM7icPkM5p+H+B8H/nUeFhH8JL6IL5RFRMumTCBMlrVbyBOIBZlChkD4n5r4D8P+pNm5lona+BHQllgCpSEaQH4eACgqESAJe2Qr0O99C8ZHA/nNi9GZmJ37z4L+fVe4TP7IFiR/jmNHRDK4ElHO7Jr8WgI0IABFQAPqQBvoAxPABLbAEbgAD+ADAkEoiARxYDHgghSQAUQgFxSAtaAYlIKtYCeoBnWgETSDNnAYdIFj4DQ4By6By2AE3AFSMA6egCnwCsxAEISFyBAVUod0IEPIHLKFWJAb5AMFQxFQHJQIJUNCSAIVQOugUqgcqobqoWboW+godBq6AA1Dt6BRaBL6FXoHIzAJpsFasBFsBbNgTzgIjoQXwcnwMjgfLoK3wJVwA3wQ7oRPw5fgEVgKP4GnEYAQETqiizARFsJGQpF4JAkRIauQEqQCaUDakB6kH7mKSJGnyFsUBkVFMVBMlAvKHxWF4qKWoVahNqOqUQdQnag+1FXUKGoK9RFNRmuizdHO6AB0LDoZnYsuRlegm9Ad6LPoEfQ4+hUGg6FjjDGOGH9MHCYVswKzGbMb0445hRnGjGGmsVisOtYc64oNxXKwYmwxtgp7EHsSewU7jn2DI+J0cLY4X1w8TogrxFXgWnAncFdwE7gZvBLeEO+MD8Xz8MvxZfhGfA9+CD+OnyEoE4wJroRIQiphLaGS0EY4S7hLeEEkEvWITsRwooC4hlhJPEQ8TxwlviVRSGYkNimBJCFtIe0nnSLdIr0gk8lGZA9yPFlM3kJuJp8h3ye/UaAqWCoEKPAUVivUKHQqXFF4pohXNFT0VFysmK9YoXhEcUjxqRJeyUiJrcRRWqVUo3RU6YbStDJV2UY5VDlDebNyi/IF5UcULMWI4kPhUYoo+yhnKGNUhKpPZVO51HXURupZ6jgNQzOmBdBSaaW0b2iDtCkVioqdSrRKnkqNynEVKR2hG9ED6On0Mvph+nX6O1UtVU9Vvuom1TbVK6qv1eaoeajx1UrU2tVG1N6pM9R91NPUt6l3qd/TQGmYaYRr5Grs0Tir8XQObY7LHO6ckjmH59zWhDXNNCM0V2ju0xzQnNbS1vLTytKq0jqj9VSbru2hnaq9Q/uE9qQOVcdNR6CzQ+ekzmOGCsOTkc6oZPQxpnQ1df11Jbr1uoO6M3rGelF6hXrtevf0Cfos/ST9Hfq9+lMGOgYhBgUGrQa3DfGGLMMUw12G/YavjYyNYow2GHUZPTJWMw4wzjduNb5rQjZxN1lm0mByzRRjyjJNM91tetkMNrM3SzGrMRsyh80dzAXmu82HLdAWThZCiwaLG0wS05OZw2xljlrSLYMtCy27LJ9ZGVjFW22z6rf6aG1vnW7daH3HhmITaFNo02Pzq62ZLde2xvbaXPJc37mr53bPfW5nbse322N3055qH2K/wb7X/oODo4PIoc1h0tHAMdGx1vEGi8YKY21mnXdCO3k5rXY65vTW2cFZ7HzY+RcXpkuaS4vLo3nG8/jzGueNueq5clzrXaVuDLdEt71uUnddd457g/sDD30PnkeTx4SnqWeq50HPZ17WXiKvDq/XbGf2SvYpb8Tbz7vEe9CH4hPlU+1z31fPN9m31XfKz95vhd8pf7R/kP82/xsBWgHcgOaAqUDHwJWBfUGkoAVB1UEPgs2CRcE9IXBIYMj2kLvzDecL53eFgtCA0O2h98KMw5aFfR+OCQ8Lrwl/GGETURDRv4C6YMmClgWvIr0iyyLvRJlESaJ6oxWjE6Kbo1/HeMeUx0hjrWJXxl6K04gTxHXHY+Oj45vipxf6LNy5cDzBPqE44foi40V5iy4s1licvvj4EsUlnCVHEtGJMYktie85oZwGzvTSgKW1S6e4bO4u7hOeB28Hb5Lvyi/nTyS5JpUnPUp2Td6ePJninlKR8lTAFlQLnqf6p9alvk4LTduf9ik9Jr09A5eRmHFUSBGmCfsytTPzMoezzLOKs6TLnJftXDYlChI1ZUPZi7K7xTTZz9SAxESyXjKa45ZTk/MmNzr3SJ5ynjBvYLnZ8k3LJ/J9879egVrBXdFboFuwtmB0pefK+lXQqqWrelfrry5aPb7Gb82BtYS1aWt/KLQuLC98uS5mXU+RVtGaorH1futbixWKRcU3NrhsqNuI2ijYOLhp7qaqTR9LeCUXS61LK0rfb+ZuvviVzVeVX33akrRlsMyhbM9WzFbh1uvb3LcdKFcuzy8f2x6yvXMHY0fJjpc7l+y8UGFXUbeLsEuyS1oZXNldZVC1tep9dUr1SI1XTXutZu2m2te7ebuv7PHY01anVVda926vYO/Ner/6zgajhop9mH05+x42Rjf2f836urlJo6m06cN+4X7pgYgDfc2Ozc0tmi1lrXCrpHXyYMLBy994f9Pdxmyrb6e3lx4ChySHHn+b+O31w0GHe4+wjrR9Z/hdbQe1o6QT6lzeOdWV0iXtjusePhp4tLfHpafje8vv9x/TPVZzXOV42QnCiaITn07mn5w+lXXq6enk02O9S3rvnIk9c60vvG/wbNDZ8+d8z53p9+w/ed71/LELzheOXmRd7LrkcKlzwH6g4wf7HzoGHQY7hxyHui87Xe4Znjd84or7ldNXva+euxZw7dLI/JHh61HXb95IuCG9ybv56Fb6ree3c27P3FlzF3235J7SvYr7mvcbfjT9sV3qID0+6j068GDBgztj3LEnP2X/9H686CH5YcWEzkTzI9tHxyZ9Jy8/Xvh4/EnWk5mnxT8r/1z7zOTZd794/DIwFTs1/lz0/NOvm1+ov9j/0u5l73TY9P1XGa9mXpe8UX9z4C3rbf+7mHcTM7nvse8rP5h+6PkY9PHup4xPn34D94Tz+6TMXDkAAF4pSURBVHic7d3pktu4kgZQqsPv/8o1Pzy6lmUtXLBkJs6J6HDP3HYViY0APoG6/fz8bAA7ZR4wbrMvAAAAAAAAYJZfsy8ACCFz4LvXkXsUIgMAAAAAAKUIhmENKwS/LX0rL8ExAAAAAACQimAYahEAj/GunAXGAAAAAABASIJhyEkAHNOnehEaAwAAAAAA0wiGIT4hcA3P9SgoBgAAAAAAhhEMQyxC4HW8qmthMQAAAAAA0IVgGOYSBPPIqWIAAAAAAKALwTCMIwTmKEExAAAAAADQhGAY+hIG05KgGAAAAAAAOEUwDG0Jghnpsb0JiQEAAAAAgLcEw3CdMJgInCYGAAAAAADeEgzDOcJgohMUAwAAAAAA/yMYhn0EwWT3swmHAQAAAABgWYJheE8YDAAAAAAAQAmCYfibMJiqnBYGAAAAAICFCYZBGAwAAAAAAEBxgmFWJhAGAAAAAABgCYJhViMMBgAAAAAAYDmCYVYgDGZ1vl8YAAAAAAAWJximMoEw9HHvWwJnAAAAAABIQjBMNcJgGOexvwmJAQAAAAAgsP9mXwA08rMJhWGUVyGw/gcAAAAAAIE5MUx2wij4bNRJXieGAQAAAAAgMMEwWQmEqewesmZp50JhAAAAAAAITjBMJllCMmjlakAssAUAAAAAALZtEwyTg0CYlWQLc7NdLwAAAAAALEkwTGQCYfjttsXrD2cD4ef7ECwDAAAAAMAA/82+AHjhZ4sXgsFsRwPULIGr/g4AAAAAAAMIholEQMTqvoW5WcLeM/R/AAAAAADoSDDMTD8PfwqEYJ/K4fC2GQ8AAAAAAKALwTCz/Dz9CbQTNTw+0t+NDQAAAAAA0NCv2RfAkgQ+wB6PY0XUsBsAAAAAAFJwYpiRvCIW3jsSfK4Ykho7AAAAAADgAieGGUGgA+3dttd9K2po3GIccIIYAAAAAABOcmKYnpwQhr5WDkeNLQAAAAAAcIBgmF6ENkBvPnwCAAAAAAA7CYZpTVADYz2fGl6x/xl3AAAAAADgC8EwrQhmarpta7+uOKtofXHU9RiHAAAAAADgDcEwVwli1jAiHF45gL567yuX3SvGJAAAAAAAePJr9gWQluClvpFh4+3hz6ptS3g71r0dKXcAAAAAANicGOacqsEdf7wK07xW+pre/SZq3ey979vTPy1/vzELAAAAAIDlOTHMEcKVNXwL5Z7/96vtImqgmVHWsnz3QYRHV9vZz5vfAwAAAAAASxAMs5dQeA1ngrPHv3O0nawW1Akn/3akLK60s+e/pw4AAAAAAFiOV0nzjdewrqHV63sFbt+t1J963evV9mpcAwAAAABgOYJh3hGcrKN1mLv3560cIutbMT6IYJwDAAAAAGAZgmFeEZSso1c4++1E58qh8N3K/axl/bf4WSvXBQAAAAAAixAM88jpOVoTAPMsapsw9gEAAAAAUJpgmDuhyJpG1Pvz6eGoweAMlfvdyHtr1aZ8OAYAAAAAgLIEwwhC6okavH57vfSqVup/veq/dRmuVCcAAAAAACxCMLw24UdsZ4LU29Ofe2gH8C8fmgEAAAAAoBTB8JoEHrHNePWyNnHN1dPQ1cr+1f1kPS1erW4AAAAAAFiUYHg9Qo64roaLLYI37eO4ViF+5bLvGQqPKDcfnAAAAAAAID3B8FoEG3F9C87O/O9nw7jZ7STrydK7KwH/7LLnM/UDAAAAAEBav2ZfAEMIM9q7B39XyzZqCHq/r6jXl0GrNpLN8/1mPy386nfqFwAAAAAApOPEcH2rhVKjXX3989HfdeT/TwxH60efjc+rpQEAAAAASEcwXJfgYqzbNiYkfv75V19BzRhH20aVvlvttPCzCNcAAAAAAAC7CIZrElb0966MI75m9mxgHe0+KqgeDme85qt8CAcAAAAAgBR8x3A9Aoq5bk9/9qiPs4GtoDeG27ZGP61+WvhZxA+FAAAAAADA/zgxXIdTazG1DIpWqt8r4XeGcG7vNa5U5xX8PP0JAAAAAABhCIZrEELMsbfcWwWVGQLPmW5P/x69vKJf3xWrnRZ+5OQwAAAAAAAhCYbzix6S8JugqK935Tui3L/1wVX66Cr3uYc3OAAAAAAAEI5gOC/BQz7C4Tlml/un3z/72npY+bTws2zXCwAAAABAYYLhnIQNbY187XDFIHC2PWWq3PvL8PruGYzXAAAAAACEIBjOR8jQz5lg60x9PP4O9XnNkfqKepJVmFqfNzwAAAAAADCdYDgXwcIYgjoi0e9/O1oOEfuxugQAAAAAYBrBcB4ChX5elW3vUCliaLWCqKeGaeO2xX+ltXYCAAAAAMAUguH4vIJ0np4B08/Dz1a/55ytm8ihIee866tR61qfBwAAAABgOMFwbMKDGHqES1EDK/414gSq9nBchtPBAAAAAAAQhmA4LqFwLL3CJ6HWOTPKTQg5nzAYAAAAAABOEgzHJBQeb0+Z+37aOq7UpQ8JzFGpfCrdCwAAAAAASQiG4xEQxua10vONLq9XfXLkNWgfAAAAAADAZYLhWITC6xL+/StSmbwLh1tfY6R7BgAAAAAAChEMxyEUzuM5vFN340QMTiNeE7/pmwAAAAAA8P8Ew/P9bMKLjG5v/p26PvXTlqeHtScAAAAAAKC5X7MvYHEC4dwEeGP1eG3z0T748+Y63v3/mcf4CgCs4OqcxxwWAABgIU4MzyO0gO9uW5/v8m2t53cNGyuOU2YAAAAAAPDEieE5hBaQ173/9g6ro4fhUUUfX9UrAAAAAABTODE8XvTQAtinZ182TgAAAAAAAE0JhscS9kAtvfq0U6XnGGMBAAAAAOANwfA4AguAfoyxAAAAAADwgWB4DIEF1KV/z7dSHfxsa90vAAAAAACNCIb7s4EP9enn86xS9s/3ucp9AwAAAADQiGC4Lxv3ALTw6nunPWMAAAAAANhNMNyPDXtYiz4/3opl/hwQr1gGAAAAAACcIBjuw0Y9QF/G2T+UBQAAAAAAXwmG27NBD+vS/8dQzv9SJgAAAAAAfCQYbsvGPACzeAYBAAAAAPCWYLgdG/IA/RlrAQAAAADgBMHwNT9PfwLQj7EWAAAAAABOEgxfc9sEFcDfjAn0dpt9AQAAAAAA5PNr9gUkJwCqQ9ACsV0db5/7eMXx2zgGAAAAAMBbTgyfVzFUAP64bYK2KFqHwu/+fwAAAAAAUJZg+ByhcD3qlHcExHO1CoVf/Rz1CgAAAADAMgTDxwkQYU17Q0Rh41h7g/t3/03W+nq+7qz3AQAAAADAIL5j+BihMKzjZ3sfvhkLxvhUzq/qZnS9RPneYqEwAAAAAABfOTG8nyCoPnXMXl4v3d+RUPjb//+bo3/vXf2PbhPaIQAAAAAAuwmG4W8/m4CYP761BaHceL3KfO/rqNU5AAAAAAApeZX0PoLC9bx6jTC8op20927M3Rvenh2z370q/Egdz3ilNQAAAAAAfCUY/s4G/7rudS/4g3GuhMKt6PMAAAAAAJTjVdKfCYXZNq+XXp26n+/MdwADAAAAAAAPBMPvCYN4JiCGvl71r4whb8ZrBgAAAACgOMHwa8I/Pvl5+of61HN/VULhb7QlAAAAAACmEAz/y6Y9R2kzcM0qoTAAAAAAAEwjGAbYxwcAxrkaCkeoK8E2AAAAAAChCIb/FiFMAOIyRrSnTAEAAAAAYADB8B/CCR7dNif+oLcer5DOMJZnuEYAAAAAAIoRDP9mk55Ht6d/FxDzyHjRj74GAAAAAACd/Jp9AQEIedhDYMWjn02buOp57G1RnsZzAAAAAAB4Y/UTw0IEngn72Mv4cd4qobDxBAAAAACAMFYOhiOGCEAuxpHjWofCPy9+5qffF0XU6wIAAAAAoKiVg2GAFgR857U4UetULgAAAAAA7LBqMCzI4R1tA/p57F+tAl19FgAAAAAAdlg1GAYAAAAAAABYxorBsNNlwJ1Tq+P0OC2cnXYDAAAAAMAwqwXDNuH5RmDFWcaX91YOhVe7XwAAAAAAglopGBbaAMzVIyTd8zON/238bMoSAAAAACCtVYJhG9nACMaaf93LxMlZAAAAAACYaJVgGPYQXK2pdb0Lh/8YFQpnPjUc9bo+yXjNAAAAAADLWyEYtoHNHkJhyE0f7uv5WerZCgAAAACQTPVg2MY1ewiUcGq4rcfvoo3Uv2bVS6QyaKXiPQEAAAAAlFY5GF49mGEf4Qa0d3v6c/Tv/cSzAQAAAACAJVUOhgFmWj2AnPWhC+Fwe8/l5QM1AAAAAAAJVQ2Gbfqzh3CDR9pDHcJhAAAAAAB48mv2BXRgs5+9fjZhIH1pY/Pctu/PA/VznPJiFaPmk/oUAAAAAMNUDIbhCMEQj/aEieSRJRyOcA2wullj/6vfazwAgDWMnn+YYwAAUC4YFuhwhlCGnrQvqtCOqSTynNH3egNALVHmHe+u4/bwv5t3AAAUVykYjjLRJicLIO6cGq4hWh1mb1fGRyrI2gcfr1tfBOCIq88+z51zss05fp7+Xb0DABRWKRiGqyyAILdsGzBZGBfrWuG5V21cOBsSr1DXMyjXXCLVV6traTHGzS6X2b+/mtbPvW8nTPmt8nxj29Q3AEApt5+fEvPXEjdBGBY9bFvbcUWb6qdFPY2qn0/Xqo0wWuS5U5SwJJPKY0jkuqxc7lept/cil81MEeZjs1y999n3NLtPzTK73GdYta4BAEqpcGJ4xck4fXllI605CdFeq7FfvbCqqK83z745Psv9viuOaVXbanXqjSPUy3GR+lflZ9CzSOU+g70SAIACKgTD0NNKi1z+FnVDc3VOcgPvGLPNWwCqi/ysq/wMilzus1SubwCA0rIHwybn7PW4WDnTbnwyFmrRj6EO88F/eVMFQD1ZnneVAsMsZT5TpfoGAFhC5mDYBJ2z7guWs21ISLyOlqeGbdLHoA6gFvPB92zUAtSQ9VmX9TmUtbxn+1Tf1sIAAIFkDYZN1GnhakD86u9a7EBMEfqm15NDG/rRMVk35gGo8czLEgpWKOsIXs07MtQ/AMAy/pt9ARDAbWu3UPl5+IcaLGJza9m/e4l+fRCJ5+t5yg4gl0rjduR7sX7vQ7kCAASVMRg2seSMPe2mdTgjJIZ5MgTCAKOZkwDkUHG8jrg2jnY9FSljAIBgMgbDcNaMcPjxdwuK8xIw5iEQhpo8P9t5V5bKFyCG6uNxhPszrxhLeQMABJItGDaRZIQRoZKgeE3quh+BMNRl7OzjuVyNoQDzrfLMm3Wf1t9zKXsAgACyBcMwyuiQyQI1PhvmtPCqHen78J7+0ZfyBYjDmNyX8o1BPQAATPZr9gUcYPLIDLdtbNtzegfeq/oc0M/htUh9vnU/jXRvP5txCGC2SM+FEUY/d1Yr3+jMPQAAJsoSDJvEM9N9wTKjHT7+TgsnVrWn72XdXMh4zTDC7Llf7775/PNn32/WMRSoYfUxaPYzoLpM5Vv5g2jP7te2ct8HAJgiSzAMEYw+PfzMwmm+2W1gJcoZ1jWr/898vkYIilcPZoB5jD1rGVXf0dcTI8ohw9fYmH8AAAx2+/mJNif8R/gLJI1Wi40obdLiaY6r9a/evrtSxlnK1wc9qCrKM3KvDH1wdJlmKJMWPM9zUm//UibzZXj2Ha3nXve0aigcuZ9FKavIZQQAUEqkE8M+JUhPLdvWzFdLPxIszXH11LCx7rOr/SpLv4h+fVBdpj44et7hOQWQ39VxvMebLFYKhTM9Rx+vdfYb0jKVGwBAWv/NvoAHGV5xA49uW4yFi34C/9IvgFeiPLvPGHndxlCAfG5Pf2b52S3NfH7dttzzjG2bf/3mHwAAA0Q6MfzMhJBWei9sZp8gzrzwhJ4eP3XuE+jxqBNGqtLWopzqASCO25t/7/V7zrxBqfdzeHYgXM3M+YY1AgBAZ5GDYWhh5ILi3e96XkhZ5OR39XXSjHPfWNDvYvl5+FPd0FvVNtb7WaR/AsQ3a5w+8uHoEdc4en220vNxxgfhzUEAADqKGgwLXGghykIiynVABj02dWwsxOIZzygr9Pvem7XGT4CYoozNs9+e9WhEOByl3GcQEAMAFBHpO4ahJYsHyEv/XUuEjUTqWW0cWe1+AVYWccx/d00Rr/UMbyD6Y1Q5CIUBADqJGAzbIOYKCzZGudLOjHPfte7HyjyGd/Wgfmhl5XlAr/vWPwHiiPyMe762Gdfa43dGLvNZRs23zEEAADqIGAzDWRZsUMvVDYfnv29jYS7lT2/mAcJhgMoyPOduT3/OvIYWPydDmc8kHAYASCjadwyb8HGUhRozjfgeK67388fvw/JKMqhJv/7DswmglmzPuAjXe/VZGOEesjDvAABIxolhMrptPr0LHGOzYi7lT082JP/VY46kjAHIQig8Vu8yMwcBAGgo0olhEz1esSgjOoFEfM/149TwWHv6h/rgrAivrIzK8wkgP8+3cx7fGHT073DOmTI/whoOAKCRKCeGbVrxzIlgoCfPnTGEwvSk7XzXuoyMnQDjeM5dt6cM7T20pSwBAIKLEgzDIwsJsjnTZm2u93f/TuFP/zuQk7nCfsoKIB9j9xjKuY9e5Wr9BgDQQIRg2MSORxZmADU4LUwv2g0AsNe7eYP5RF/KFwAgqAjBMDzyQQGysvCN49tJ4ef/lvaEwvSi3ZzTstyMmwB9eda191ymyniMHuVsHgIAcJFgGIBKzmwU2FwYz2YcjKffAbCy29OfAACwpNnBsM14XtEuyOroJoO23pbyjOFbPdiM4yxtJw7jLUAfnnV9Kd/xnBoGAAhmZjBsIscn2gew15FXR3/6GVynHOnFRi4AQE7mcQAAgcw+MQyfCBjIyKnh/n4e/mxZfurimj0nhW0KcYZ2046yBIjLGE1lrdu3tRsAwEmzgmETOPbSVsjIpk4fj0GwsSEXfQLiaNUfjcMAwBHWBAAAATgxTAatTwVCNNr3ZyPHAHVxzqdyswHEFdoPAAAAADQyIxi26c5Z2g6ZCDNYhbEZAOAaawdW0bKtW4cAAJzgxDDZmPhTlbb93uiNMnWx37eTwjY5uUL76cfrpAGAWczxAAAmEgyTkVdLk4UFbztCxlzUFVdpQwAAAADQ2OhgWJhHS9oTGQg32hpVnsaX796VkTYPOeirADEYj1mRt5cAAEzixDDZWQRQifa8z+3pT8YTCgMAAAAAJDMyGBZ40Iu2RXTCsvaEw/GoC1rRlgAAAACgAyeGAcYQdPTT6/uHfejktVflon0DAABHWEMAAEwwKhi2uQ5AbzYW+nt+nvcK5YExWvRf83wAYCZzEQCAA5wYpgKhBFloq/nYZPjjVSgMrWlXAADrMPcDABhsRDBsUx1gP2Mm0TklDAAAAACQ0K/ZFwAXCCbaeRdGKuP2bpvwl3zubdaYAAAAAACQVO8Tw8IPehFOtPGzfe6n3/53WIE+4JQwAADQh3UGAMBATgyTkUXDdUeDrsf/Xvlf59Twv46Ux7s2qEwBjvNMAgAAAFiEYJhshJLXXd389UrZNt5txK9Urmfb4owA42dbq24AAACysF4DANipZzDs5AGtmeRf17JfOkV83aqntFa8ZwAAAAAAmMqJYbKIEjxmPuHZM4xzivi81cLhle4VAABg1BrIehwAgK96BcM2/mlpxuLmSBvOEIqO6pNOEZ+zQllVeC54PRkAAPDO7DXPu9+fYQ2z2gemAQCmcWKY6EYtYCxA2hMSc6d/AQAA1WRZ5zxfp/U5AMDCBMOsqMfiLfLCKsJiVUi8rqvt77G9HP1Z90+d+/Q5AABwVZU1haAYAGBhPYLhKhNl6ujVJjMsns7e+6t7a1WOQmL2em4fZwLe28OfLdqw10kDAMA6VtjjskYHAFiIE8NUM2rRlmGx1Losepy6fPXzMpQt+7T8YMLj/7bn5776GU4OAwAAe6y6bhASAwAU1zoYXnXiTD/a1DlXyu1bKHf153/z6WdbmOZx9mTv3v/2Suh8tf06NQwAAPXYf/jbvTysfQAACnFiGI7JsCDqFQo//3czFs09TqAy35n6+dQGv/08J4cBAIA7a4PPBMQAAIUIhmGfLAugkQvaEaeHW/E6rLFGvtI9Q/sDAADisZY4xroaAKCA/xr+LBNqqsqy4BndB7N+athYFdvVV1AfOfV+hXYEAAA5/Wzm81cpPwCApJwYhteEnd/dnv4908LQd8T2c7UdnH2tNAAAwDeZ1q3RZf2wOADA0lqeGIYqsi1qoixsb1uusotSbsyTqb0CAADXWAP24QQ2AEAirYJhE0AqyBhsRux7mcqQtiK2x2+utNeM91udOgEA4FnUtXM1yhgAIAEnhuG3bGFm9AXX7elP6rvSJqO3Z3L4efoTAADMDccSwgMABNciGDbhg3EyLbIew2EBMZE5NVyL8QYAgExr54qUPQBAUL9mXwAEkCFEOLuoendvMxZp92uxQOSVny1HXyQu7QcAgG2z5ozCGg8AICDBMKt7XKREXLScWdDuuYeZ9/nqd1u451ah/m7b+fuIOHYAAMCKoq5Neq8Xot73/bqslwAAgrgaDEedeMIZkRYqvQLhqJ6v3diyJgErAABwRqQ15Iw1TfQPYFvrAQAE4cQwK4u6KDmyeIt6D1cJivN4rpsrJ2/vP29Wu3ZqGAAA8pm9Xoy6Doi2rrZmAgAIQDAMcQiE3+uxoF2tDEd6fkX7UVnDYQAAYKxZc/eM68mr67QWhMMAAJNdCYZtnEMbe/uSxdMf0T75zHsrBa02OQAAYJzR64xKc/2ZIbF1EwDARE4MwzWPC6ijCxsnhNs5EhQry3ZelfOrRf7t4X878rPVFQAA8MrIMLP6uuTMeu0q6z0AgEkEw3DO1QWTU8J9KbeYIry6bA/fNQwAAKw2rx8dEFs7AQBMcDYYjryhDz29a/t7FzN7+s7jYuz5v7doIoM9C/zorwNf6RXYAACQyYh5+spr75EBsXAYAGAwJ4Zhv1GnhD/9d/f/zcKJ2b6156ML/Iht+mw4bHMDAAD66B1Wmsf/MSogtn4CABhIMAzfjQqEoRofZAAAAFoRCs8x4m1K9k0AAAb578TfMVmjim8nc1+9yvmVT4vHXv1FPySTzO317OZQ5nsGAIBoes6vb5tQ+BtlBABQxJlgGCr5efr3vWHwnp8rGII/MvcHGyAAAFCTuf4xygsAIDnBMLQPcUcFYJmDNta0Wptd7X4BAKCHXvNqIec5yg0AIDHBMFzzuCCacUr45+FPIRQZrNZOV7tfAABoSSgcz8/m1dIAAGn9Ovjf2+CG12b2jefXYd9ZpDHC84cjqrrfZ+V7BACAFVgrX3N7+ndrJACARI4Gw8DfIi+A7tdm0UsPr9rVCiGxjY98fGAGACCnHvNu88H2rJEAABLxKmmozwKNGSq/Wqzqfa3AeAgAkINQOBdlCwCQhGAY1iAMYRYbBPrfbLenfwAAWI95YH/KGAAggSPBsI1tyE0fprWfh38+qbhBUPGeAAAggtZrV3P3cZQ1AEBwTgzDWoTDtPT8ncKf2lfFDYK991Tx3gEAIANzcQAAeCAYhlhGvOpUOExPnwLiiq/yrXY/AAAwU8v1qrn6HModACCwvcGwIAlq+dan9Xmu2vOK6SpsfAAAQDyrrEciskYCAAjKiWGIafYiavbvJ49vbWWVgPhdOehLAACwT+vTwubicyl/AICABMMQx/OiySulqeTnzb8DAAC0JJCMQ10AAAQjGIa1CegY6X56uOrmwO3p36veJwAAtGZtCgAAA+wJhk3OyUIIc44+zmiVXy8tEI7rZ6vd9gAAMBePSJ0AAATixDBVzFxotPjds7+fVFDCFWfbqZCOnn42YTAAQAbmagAAMIhgmGpGB8S3hz8f/+nxO3qzGGcWbY+rnkPgb21KmwMAqMfJ1LjUDQBAEIJhKoqw4OgZFPckLGEWbY+jnAYGAIA8Mu2NAACU9Wv2BQC73LZx4cfPZsHGHPc2rv3V9208e9UGBMAAALxjDQEAADt8C4ZtwpLFc5g5Mki9KuICVkDHUS37nA8n1LW3jWQZvwEAuMa8DwAABvIqaSobESyNXMQKyliJVwTTm/YFAFCDtXIe6goAYDLBMIyRdfEjOGE2bbAOdQkAAAAAMNGnYNgGLhVEPzWcNTCGV3q1Z6eH81N/AAA8azFHtKbOR50BAEzkxDAj3ba+C4B3i8qoi44Z13Xb+tcD9CJczEm9AQAAAAAE8Gv2BbCkeyi5WljweN+jg9nn37da2VPHve36cEMOxhoAAAAAgCCcGGamSsHOkfDjyn0f/bstTgcLdjhiVL/WLuPLUEcZrhEAgNcq7SmsRt0BAEzixDCztT49/O407q3h78jg3SLrTBlYsBHVY3vWTmNZabwFAAAAAEjBiWGiqBDqjApC3pXVnu8PPnPiGDIQRMahLgAA+MacEQAAJnh3YtgEnRl6f/dwy1PDs08gnw1s9e35vtXBimF8q+/AnvH93QAAAAAAkIJXSRPR1dC1Zzi0Uui00r32cCXcvMtaB1f7cO8PidCPOgMAAPaY/YF7AIAleZU0Ix2Z8EcMdvf83ciLmgjlv4qW35kduU319u3V6K+sXF6zZS37rNcNAAAAAHCIYJjIzoRCe38u9NIjZKoeEHu9NgAAcIQ1AgAAnCAYJoMI4XD2RafTwmP0Dm+rB8SfHPmgyKplNJMyBwAAAAAI7lUwbHOXiHq8Tnbvz8welOrT9WQIiCO+Dp4+ordFAAAAAAA2J4YZ70qA0OPV0t9+3pnfJyRZ04x6zxAQ79X6VHuVcolOOQMAAAAAJCEYJqNe3z386vdkFjk0jHpdWUWu615u27ixgPpW6z8AAAAAwIIEw2TWKhB69XOETX08BpiVgpgo9xLlOs46e/3v+mv28ohO+QIAAAAAJCIYZoaWYUKrE4O37dgJxG/3MDswafH7W9/Dq59X4aRrtOuPVKYjP2Dxru9GKYtqlCsAAAAAQDKCYarwStk/rgY297/fsjz3BOmCpraylunVazYOAAAA5GD9BgAw2K+n/ztjiACPVl9U7O3Dj+UUqd8/XkuGuoxUdu/8bDnKsqX7/Waon4yUKwAAAABAQs/BMIyyYljV05Gg5rncby/+/qufd7a+zoZI2ULiyHqcAt/rVfsa+bsBAACIyYdOAQAGEwwD27YvvHv+31t8F/NeZ05C95ZxAZvlAxlZrnNFGds9AAAAAACb7xiGnqIFKK2/h/lne/89trO+33bU741Wt0dk+e7hDNe4mup1Uv3+AAAAAIDFCYaZySZ8LFdC45/tc1B8//mtw+lP18NnyggAAAAAABYiGIYavoWte8PYUa/vHREQ9wo+KwWqo+5l9PdT0566AAAAAABITjAMdbwL3yJ/V2vWcLiS6K+WjnxtAAAAAACQxmMwbPMd8ru9+CeCT9cR5Rr3qDxORr63yNe2AuUPAEA05qgAAHCCE8PQ18jFauaFcc9wuFW5ZC7fvSKfHo56XdUpdwAAoAdrDQCACX7NvgDKynQKtIpWZX7b6i3QfjZt8oge5dWiXalHAAAAAAA4yYlhWor2+mJyidxuqgXle0S956jXVdGKZb3iPQMAAAAAixAMA6sQ+BwX9dXSUa8LgHV4DgEAAADpCIZpSVjzWsYymXV6t/fvPVMXGeuvtahlEPW6KlC2AAD01GLtZ84KAAAHCYbpweKMKrTlP1qURY/gXx0BAADkYh0HADDJr9kXQFk/W+zvjCWu23Zukbj372mb540ouz0//7Ge1WV7NmkAAAAAAAoSDNNT5QDubHiZSZZ7vL359227dv0Z7n2Ge7m07ttHfl7VcQUAAAAAALq5v0paAEIvvneYiL61SW32u5Zl9Bj0Kvu5lD8AAKP4nuE1qTMAgIl8xzCjmPhzxN4NAidH5zr7yu8r/zsAtOB5AwAAACxHMMxI1U4PH9lQzHrfK26aZq2rWVqUlzKPQT0AHGPcBIjBeJyHugIAmEwwzAwWArlEDYevXterdqhtniMcBgB6M1cAAACAiwTDzFLl9HDU0LS1Gfc5+nd+a4+r1PVZR/rzu7KsMi6QmzYIADBOq3WWOVx86ggAIADBMLNVCIJeLWQrhoiR7qnldxAfaYORyiCiVn25wriQjfIGOMf4OYZyBgAAgAZ+zb4A+H/3zZ6swduncPjnzf++kqhlIBBur2VdP9ePegAAAMjHB3wAAIJwYphoKp4UrBRmRbiXCNfAZ3v68Jl6/NlqjhGzKU9gVeYUOXhOQX1eJw0AAIMIhonKgi6ukZuoNmzz0ocBWIVnHkAcxuR41AkAQCCCYSJzMjCuWeHwjKBYOB3LbVMnALAKawFYhzk+AAAMIBgmAwExwsCcvvXbo3WqDbRnbAUgKs8o4CzjRxzqAgAgGMEwmVhQxLJqSLfqfZ+l38akXgB+872WANCHZyMAQEC/Zl8AHPSzCeYYR1ujqts2bqPmUz+yWQTAK54PsKaWc1R7B3MZxwEAgnJimIwsMOKw0GaPT31WG6przyvgvSYeqMQctQ3lCLRiPAEAgCeCYbKywIP16Pft9CzLM2GvgBiYyfgTh2c90HpMNq6Mp8wBAAL7bzNho4/bi39a03YhD/11Dfex/mx993xmAIzgeXeesgPIz1gOABCc7ximl1ff5/Nqo9+iIb+93wM16zuezn5PlWBqnCN15LvCrus17t7e/HuLn/fumr/9Hs8YYAbPquOM18DdfQxtOS4Yl/szjgMAJCEYZrY9G/8Aj2zsxNO7Ps7+fM8YYC8hBEAMt4c/jcs5mGcDACQiGKanowuvoyeKLeqISBA1ho2dc3q0ySz1cPU11wD0YVwGRrGGAABgef/NvgDKu7rR8+q7in3/ZDzq4zfl8JkPetSTsd4yXjNAVUJhYDTjTlvKEwAgGcEwwL/OBEev/o4Aqi+bEMe0Lq/M7dsHjIBXWo8LnlP/+nnz7wCv9Jqv/WzGoBaUIQBAQoJhRrBYYLaWGwpH27PwqS/jyxxV2nWV+wDi8pz6m9f6A0f1nK8Zi84RrAMAJCYYZhSLBioTLrVxthyNL9+1LCPtHaisxxjnOfU35RGL+iAD4XAcygsAIDnBMEB/grQ/em0k2KAYo2JbfnVP2hPQmnHFCTMgLmPTd8ZwAIAiBMOMZBFRW5XA6Oh9VLlv6mo19lZu65XvDTiu53darubn6U+As3rP1wSf7ykXAIBCBMMA5wmT2rtSpjYs+tHWgdUIh9u4bevdM9DPiDmpgPiPkWVhvQEAMIhgmNEssNY2s/5nLjS1+3GU9d+UB0A8q4QOq9znbC3muOqJTEat61buF6PHb6EwAMBAgmGAcyxe41p5E6cHbR1YldeWnlf1voAYRobDK41nM+7XWgMAYDDBMDOstLAilz2L0tvO/473RowBxpk2ZaCtA6sb9drSCn629UKUStQb2Yycp1Yf22bdn7UGq3rub5XHFwAC+jX7AoBSfI8cLbRqRz/bn82Gx3/nO2UFMNb9uZd1/DX/o5VPfcF8jmej15+Pvyt7W5w9bmcvP3jlW7+6Pf35/P8HgCEEwwB9zV5wr+6+gbjaQutKu1uxrFa7Z+CYkcFDttDBPKeWmc/EPW0pQ59gvFkfTs42Xm9bnDE7S3nBXnv7VvYPAgJQhFdJM4MJEBFpl3VF2QDJYMV+8O5T2yto3Tf0tTEilnPEa2ptxhgR9dXMs66rRR1UHfdats/R9xSxjR/R6i03XDN7HvezxRyzI17X7Lq6IkoZEsfZvhWpTwKwICeGGS3zIgAYp/Un/1c6FXq23FYpn09WLINoGxI9rqdivUart21bo+5mfmXG7JNps9tc5uAzoxHzpgh9KZLW1xVt/Bwh0tcaPV/HqPqIcv/vVBhXVlpX0p/2BMAUgmFGMtlZQ6QF+bPI10Z/Kyy6hMLnrdA+yEv7jCPCXOLd72/VRmbf3zNtf44er7uM1raoJ8IY/crRa4p6H1cYy6nEh9gBSE0wDNDPu9M91Rb5Z8xa/Fh0/Ut5/KYciEz7jCXqhn3Ea7pK29+vV7u8EhBXbJPEF3WMPiL79T8yjsN39ikAGEowzCgmOETWu30+//wKmxUj9NzgrDgmHSmre9lWLAeAETzL+/OMikV7JxNjdAzGcQCAgP6bfQFASRaAfyiLmFbeKLo9/QnAOcbRfpTtOcoN/rht+sRMyp6qeu0lrLxHAcBggmGAfiyGY6u08NpzLzbHANozrranTIGWjCljvVtzVFp7AQCkJhimgp+nf4jh1WIw4qJ81jVFLIuIepdThTHj2z0IhAH6Msa24XnVhjKEfxlfxvhUxsofACAI3zFMRt9CkOf/3QJkHt/tBPMY+wDGuY+55j3neGYBI1if9mEMBwBIRDDMKD/b+cXC1YXb49+3YBlPmfPOlXGB316Nj8oUYB6hw3GeW+1ph/CeD/K0Y/wGAEhIMExEPRdo959tAcO2aQfUoj0DxCB02Mdzqy/hMHxmrD7P+A0AkJhgmJFehbKzFmECYsij98Zm5pPLWa8bYAVCh9c8u8YRDsN3xur9jN8AAAUIhpkh0oJLQLyOe/hngwwAGEno8Ic5NxCVsfo9YzcAQCH/bSZ4sG0Wfyt4HuuMfTHoewCs4v4BtRWtfO+zKXs4Rp/57bYpCwCAkpwYhj+cHl6HOs7HSW8AqljpVJo5VxzmUnBMhK/AGs2YDfPofwAMIxiGfwmIAViFZ11O6q2GqqFD7/YZqf1nq7fo4fCIuo3Ufsij6ni9bbH6RKRreeX+9VSsLfqzFAC+uv38/GybBxq8Y9JPT8be3/b2s57lpa8DEEXG+YHnaD6R2pn2Q2aR+tI3+hq00brf65sADOXEMHzm9DD055PXAPDH8zMxaujg2Z1bhFeaa0NU8KodRxi39S/ox6lhAFITDMM+AmKYz+ILgBV9mn+Oei6aA9c18hW52hGr2NPWz/Y3/QhiaLU/oU8DMJxgGI5xshEAgCjMS2mp5Wl1bRM+00cgv6vhsHEAgCkEw3Cc08O0EuEVfgAA8Ir1DgB8dmZfx/MVgKn+m30BkJgwj1YsCub3p9m/HwAAAMjp9vDPmf8dAIZxYhiu8WppWnF6eB/fMwwAAABEZZ8QgNCcGIbrfjZBFW1oRwAAAAAAQBeCYWhHqAcAAAAAAEBIgmGiy/YdHE4Pw3n6DgAAAAAAdCIYJrrHoChTSCzggn4yjAEAAAAAABDKPRi2yU42GUJi4TDkos8CAAAAAFDWr9kXAA08h8ORwp2fLXZ4TRyR2i2MsrfdG0cBAAAAAC4SDJPB0XD11X87M3QTDsN++stabtu+8fn5v9FGAAAAAAAOEgyzik8hQu/QWIDBHnsDMn5TXmt7/v55AAAAAAC+EAxDv9BYWAHw3dWQX0gMAAAAALCDYBg+EzIA9NfqBPj9Zxi7AQAAAACe/Df7AgDgiVdEc9XPwz8AAAAAAGyCYXJw8gt4xdhQS6/6FBADAAAAAGyCYYBIBJ2srmcfEBADAAAAAEt7DIYFEgBAdQJiAAAAAGBJTgwTnQ8swJoEd+saNe4LiAEAAACApQiGAWLxYQj43Q9GBsQAAAAAAOUJholMQAZ8Y5yozelhAAAAAIBGBMMAQGQjTw8DAAAAAJT1a/YFwBtCAFZ225xehGfPz4XWfcRzBwAAAAAoTTBMRDbnQTi8bb/v33jAO0faxup9CQAAAADgn1dJ24BnJq8Lhb/pD9CGvgQAAAAALM+JYWayUQ/ACE4MAwAAAADLez4xDEAsPkABAAAAAABcJhgGiE84/JnyAQAAAACALwTDzOTVnrDfquGncYIWvvWfVfsXAAAAALAQwTCzCX1gP+EVAAAAAABwyqtgWPDAaMJhgNx+nv5p9TNbMr8BAAAAAJb2a/YFwP/72Wzawx63zYcpiK/VmO7ZAAAAANDX2b1GezZwzLu+NrQvCYaJRAAA+9z7iYCYCN61w/v//+q43vLZ4IMVAAAAAEBPR/cfhwbGgmGAvIRcZNAiIG4VMt9/hn6zjm917QNpQAvGGoB1hDjpA0BK1g219dhvbLkn+j+CYYDcVgi5vE2ghqMTmVdtu8dkSNvKafR3WWsnsJ6W8ytjDdU8t2ltlwqujvtH/r4+AzX12J8zXuTRov6tG3IasTf/+Dsu179gGCC/FcLhEUyqxjgS9L9r210+LUdIUca2V9eh/UEtEcYbYw0zjNzEfKRtM9vMcd94DznNGDf2/E7jxxyeI8xqA5f3RW8/P2+vPcLCmPUYwOC8yuP2t7Ghxb0bf865UvZ7y7zlQsgJl9gyj2PaEuSScbwxznBV9HavjdNT9Pb/SF+A+TKNGa8cHUfO3u9q41WWdtGyXrSN1yK1hcNl7cQwkVQfLKA3J4fJpuVrwr8FvvpGXFXqpulrfSilVRvXrq7LPt4YZzgqW5v3AT5ay9YH7vQFGC/rePGOE6XtZGwb1g39HG0PZ8r/6O84vL/qxDBRGKCgrWpjuBPDMbVsZyPq+MzvpY9qY9Q32tlrkb5DvucHVXqKUn6RrTDeaAevRRpjRqnc3u8fgl2tTjmnel/gnChjSJTroPZY8U2rD9NXbctV28aIkPLK74ruSFnMOLW9+3cKhomg4iABEVQaxwXDMbVuY5/qoEd7VudjVRqTztLm/ojaHs7WUYT70b7+FqFOZpjdDiKW++wy6S1imfdWvU57i9hmMn44azb94LiI7UM9jhexHcx25Q2E1drwKu3jSL1pG79F+L7vZtfw6VXSXknKCK0336oNOHCFcXy/lceOo58669mm7j975fqoyDj0hzb+R5VnVKR78Lqw3yLVyQzGmTVo579p59yt2Cf0g/zU3TgrjhFHKJ/1ysAz5JgIofD9d3y7ll1vpfAdw2TTpOHDQkaEeeR1pF2MbEPPE1TtNyf19p5FWH7R2/eKc+LodTKacaYm7fxvPhCDPmG8h0+MEXyzehvxDPnuWxsZXXZ79kq/7gcIhsli9UEarqpyMuuVqvfVW4Zyy3CN/Eu97WcRllOWNr5K+8pSH7Os0g4q08b30dbXol/8a8UPhcErxgf20lb+MI96LVoo/Py7T4fDgmGia/7F2rAwpy+B3owv51iE5ZC1fVdtX1nrY5aq7aAybfwc4Vh9+sZ7xnpWZmxgL23lPfOoPz61kyhldDocFgwz27tJa5T3tkNFlU8Pn2EsWZN6b8uY0obNvLgqtPEqi/wKdTHTp3GmShvJThu/zvO0Lv1jH32AlRgXOEJ7+c4zJFc7ORUOfwuGhQeMop3BWE4PAy0YQ/qwEIulUjvP3LYq1UMErzYIMraLSrTx9jKPefxN/zjHB36oztjAEdrLMZ4h//pWHq3b2N7yP5zj/nf8WiAEgxK0oS8BZ/xsFlUjKOP5qtZBtvvKdr1ZKNcYPFP7U765qb9rlB8VeXZylPZyzorlFumej4x1n/b4//kZgmEAbpuAGNgv0iR5Bcp7nupln+X+slxnVsp3LuU/jhAhJ3XWhnKkCmM5Z2gztDBz77xFOPwX3zEMwJ3XS7MKH4Q4z/gwh1dhjrdKW4/+erBV6mE2Y8x42vY80cc9/tBP2tL2yc6YwFFR2szZsTfK9a8kcpnvfY6/e630X39fMAwAwDeRJ8efjP7+l95s6I2RrV1cEbk9Ra6HK+UW+b6MMWNEbgOr8GGI+CL3k0OvagxG2yej6P2KmGa1m5bj67ufpU+MF+W5eXW99r+/vycYPvzFxVCISTMrcnI4v8e6M35xVeSx4Gr7zhgcC276iljnq4lUBz362qufGemejTF9RarrMzI+Nz/R3mOK0I7Otos9fy/C/Wn7RPSqXUboL0e16lsZ7z2K0WU3ejyt0E8ieleOLer3yM9oUZ9fM10nhuE9gyqry/DBoOjXN8Nzmbz6gItyY69IbWXG5lXUBZfNPFqI2IZm97FZZRItLDbGtDe7be8xYtMrYjlo77FUOOF19HfNumdtn2ii9I09RvSdjM/UlUQaP+331fLtwFaT57dgGF5zUhh+c3q4DnX4m3F9nyjtJVp9RdqsqLKZ1/IeorTbI2a1qYhtZ4Uw4IjZGzyzxpjWY0KE+o04NkX5EESUsonSVka5fwA42jO4+gmvd2aO96u1/W2L1+75V7RyjdpHon2wMIreZRC1PdzZxz2n52nhWT5+1/DeYDjDqTHW0mvyqp0DsLrZz8JME+9Vg5tWWl975DXL3ntd9XukZtxfpr4za6zJ/mHZCNcdpe9GKItXIgXF2Z+pR0W715F1H+3eH83Y0F+p7a9yn5l5bl4T6bk6Q8/7zdYmZu9VcF3X/Q0nhuGP546WbcCHniJvtvOHOuIqJ/bOE9zwrGWdtGxfj5vOEdrNqifEznIKII/ZdZSxrc9u31HGRfrIVLc29FnRzLaeaXw4YqWxpNf9VWgb9nTX9bbuBcPwunNUGPShNROJ2NQNVzmx147THmvrXQ9X2tftzb/P4oTYeSPHGePLcT5odY1X69JS9vocsQ7X7pnNc7O/2R++yqhS+1D/x0Wo/25zgP96/FAY5Gqn+HnzMyJ0eogqWv+Idj2zmNjto728N+PE3gr1Mfo+jQVzja7vo78vWp8b+X3K0e69pVH3Z3zZb9YHraq28xn3pb3XUKlfjLgX7Z5ZPDfHum317r9HG6pUPo+q1X11vcbHnyPBsAZDFe8C4W3TzmEP/SSOT+MZ7DX6xN6KY8jI+zYmjDe7Xc/+/WeMaKcZy+UK4XAckT8gktXt6c9RtPm8qvaL3n1em2c0H1Ceq0J5CIWP85aIvy357HNimOyOhCLf/lsDIuynv8zzswmEyafCgrMFJ/vqidSuP11LpOscFQqvyImydaz4XB0dDts0zWuFelvhHqnPB5TjUDZ/rFAWj3OqFe73jErl8vJeBMNU8W4ysTdAqdTZYRT9ZpzKYfCo1xhpr68JaOYQDtcQsW2/uqaI19mLzY3fnCibr1f5a+O/+aAVr6zWP3rdq3bPCL5ShBZat6NV28qq9x1d13HyV88fDoOZvMJ498mD/tdWxvI82hZMPOcTCs81Yvx02qmfyOUa+dnc85oi18ksty1mO1hFy/LXvl8b0cY9S+NbuX569QHtnp6sQ4lo9TYTeQ25ou5vvT0aDFtYUtFKA3/L/rtSufGd58M1q5Xdq/FjtTKYrXd5e0bsZ/zMJ0v7jnadvdp5tPuMRmgw19XyV8bfeY6uTR/RB8jFOpRW7HH34Zkyx/Ayd2KY1a0w8PcaWHxfM88yTh5mttVsZfXJ7enfjQ+xObEXT8/xU3jTlrI8Ryg8l3A4J2W7X+9TLtp6TOrkjx7jvHZPa0JhItJu/pVxfze6cG8R8h3DUNusQfznzT/UN2NClWkSt3p/mFVXmdpIb0LhuHp+/9WqY05r2vg5QuEYeo0xxpfvzpS79n2O79Zehz7yL2VCZL3Xodo/Z2g37ymbeJrWyZlgWKOgisptOWrwJCgmmlHtcPU2/22htnLZjCQUzkE4HJM2ThXacmw2t68TDtenj7zXumy0eVqwDqU1Y9MY+ldhTgxDLdnCJ6eKa8o0ceh5cka7/i1Te+AcdZzH6uPRWdr4eU4LxyQ4GG9PmWvX7QjYWZm2TyRCYaLSfvZRTjE0rwffMQx1VNmQeb4PD6Ccen/P16vfd/R39Wpblb6L42w9Ruq3ka5lJuFMLqPHUOihR/s15rRTab6Sxbsy16778b2rtSj3/Vq2fW2es4TCAOd0H+POBsMWkRBH9b4oKM5ttXBjlft8dLVPrlhmowln8rKhPZ+yikNdtCc4GM9eynjKHKAOcw1aPNO1I75pvbZ59bNGfr3hP7xKGvrq/RrZFRe4Xj2d04hJ15Hf0eMVitXao4ky72gbY/V85T2faevntW5j6iIHY8s+tzf/Th7a+nj6ynHKjJl8OBngs09jWve5pmAY+hgRCFuM/iYozqPqd31VbHdR6+nodUW9j5GEMzUod1am/felfOeoOi+OSlnnpv7mq7jmpZ9eobB2CPQwc54xKxy+XQmGTczgb6/CyR4LfhOhz4TE8fV8fuz52S1+f+V2FvX5biF4nFC4FvOJsbT387StfLT3efSXcTxHczI+XaP8qOD29CdcoR2xV4S5XrdrcGIYrnkXDvX6BHiEASkTp4nj6nlK4t3PbfU7q7SlV+URcYJ8v84q5Z5VxLaxIpvarMbYM46ynkO5j6W8WZF2z0g+nAxwTM9x7u2Y/KvHD4UkrnyJ+Kf236sz63PXPZ/mZr57PWRZPFToh5HC4J5j6ep9vGVbXb0so/FBif60+fOMPbkZX4BIPAfaaDWuX9lDYw1Z9nXIyzyVXmavgz79/i7PX6+SZnV7O/zsk6cefO05SRxLhmdKhbZytpxH18/z76tQ9iMpL47QXmhFWwIyaDmvNe71k2F9mIWyBIBzRs31vv2eM9fx7u/ctu3aieH7DzERJrvnU6RX2rRXPObkJHEMvU4PtxDxmiLo0V+EwrEYE2MyB6c6Y888xhdWoJ2zGm2e3pwWruFIuWd8i0C262Udw/fEfccw/E0ojHKfL9pErVKbiHwvr77z+Oz1RmtDI3mN6zqceCISY08t6gCYyRgUlzkjrwiFazha7uqJat616ZHPvk/96sh1fP1vWwTDBgFoz2Sb1b0KCUfzqvH+btv7ulb2czlVkMPscbIiZTqX8o9DXVBdqzZuvkQWxnUy0E4B3rs67/zfGOvEMMQiiJrPJDSWWQFx5X7Y6t561kvl8u/JJ7XXZGOb2bQdAFox/4RcvDUGqCT6qeE9dl3r1e8YBtqxqTafSSjbtkZfPPNdMFlOkOrH1ylDYAZjTzxZnv1wljYOAPCZddpvI79X+9Mc9dN1fJrX/vV3Wp0Y1jjgGovR+YxjbJu++M2nVz+3og7OyXASnH6cGmYWYw8ArXgW9KeMaclpYaCiDOPRq/F3dyi8bV4lDS2dmRB5dXQMGQZ8+lqxL0a834jXBAArM0+muhZt3ByWlWjvtGauAWRxZv/47BjXdWz0KmmYx2Q6BhNQVu6LI1+DMkKleznCiT22rd3rMKuNC/Sz8vMTAGBl1qBAZWf3V1qPaXt+3rfrfPkzWp4YNpDDvgFjxZOJEfV+HS60pK3SmzZWg3okI+02PnUE9GacAQAi+TQ3yZLtvL0Hr5KG9j59MXiWQaMygTB3WfrkmfZ65O9kKIM9Vu3XVeqPWLQrRll17AYAyMppYWAV38LhmXsn337/xzG2dTBsQIfffl78w1wCYR5l6ZO3p3/f04bPtPPZE5k7/XQOZV6L+mSELM9R2jG2UJnvGWYlxnMA2O/bc3NG9nPq9dGPfMcwUJ1FD8+yb9o8tumfF/+/bF5d+/3/l72uIDPfNUxv2hcAQC5OCwMr2vOdwyP2UPaMwbuuQTAMVGSC2c/ZRUCUOokYND6XzZGwN0q5tvI8idoTEFcrgyNatOeVy6+yPYsWOEvbWpexBQC4yhqUWXz4mSv2hsP3/7alvWuw3b+3RzBssQjM4MHeXsuxvNknmjpfQwQrt+Uj975yOQFkZwwHorGXBQDAJ3vni89fm3fG0Xnpod/jxDCQmU3FtmZvhLz6/a3qePa9feITi/+6/F0ZC3BamG9abHAbn+hF28pLeAYAa7IGZTbzUCI4+vV37/67Vl+jd2pcFQwDmZhA9hF5UtVi4zjy/a3iWz0eqSPjAMA8vlcOcpoxH9bPAQCo6uoHFaZ+2KZXMOzTG0ALNhP6iz5WrxIK9/oOiihe3deZuqlaPjMoyzU4NUxE2lN+1vuxRambnm8DAmAsp4WpwvqWllqd+j37e09zYhiIxIN5nCgbRvyt5QQ16qatQPi6iPUKAMyRaV7wfK3meAAAZPc4p+05N282d+4VDN83tjMtUIDxbATQU9ZnUOVPLwqFAfLK+lyFiqr0R0ExADBa5X035mt9irhLW+35KmmAV4wPc2XaRLrSVjLd5yqEwnEo17V4nTSRaEd1+CD4WKuU9eN9zhgvtGtWoa1zhNdIE4nxiyzejXvv2u/QcbL3q6R1VFibiR8zZHvuvHrdSLUQ5midVLr31rK1bwDgvJWf+/d7Ny8EAFqrtu9GHiHane8YBloLMbjx0sobSxHpK68pl76U75p8WBMgF2P2H7NPEQNwjbEbIBjBMNCCSV582TaXzrapDPf56d5mhTcR+nCEawDgNa8Q5BUfOmlPeX7mFDHAWJ5LRNRqDurUMMv6b8Dv0LmgptvTn8RkEp9Tq34VpX9+C8OjXGd0+jMzaX8A/fxsxtkjlBcA0MKr+YQ5BuU5MQwc8RzeCHPiW+kkR4b73NNnVupXK90rzLbS8wAgC+PyNU4QA8RmfCaD55PD2i3ljTgxvG06E1SgH+dks4mInBKeQ5kDsxh/6lK3+z3Py83T23GCGKA94yqRtZ6Dau8sZVQwDOTnAckoZyZ3Wdpnluvs4bYJhCG7lcewlal3aOM+BxJi9vOpbJU5APCJuQLLGBkM2wiG/Gxi5KKu2Lbvz1/PZwCAMczPx3hVzua8AGMZd+mtRxszV2MJTgwDZwiIiSRbW8x2vcSg3dCCzRmAOayfxlPeAMAZ5hCUNzoYthkFMEbWScwqz4ms9UNeq/QtIB7jT33q+DPzvnmUPQDU1mse6kN9lPZr9gUAqf1sNoKYK/MkTf8BAKgty1z16Jw0y31t259rNe8G2O/qOG/MZaTb1m9uYu+OkmYEwz07KgDG2ExGTTDfPXtNboGjLIwB9ok2J285dn/6WdHu+87zCwA4w4fMKMeJYQCiqHxS4RObVHxTpa0Tgw9pcoS2AudE6Duz5pevfm+E8tg2824AqGrEOldATBmzgmEbUlCDB2E8xtaYvm2QmVzSk3YFzGL8YTWz5+JR+9zzdc0sJ+EwANQ0KnOyh0d6/82+AAA4Yfam2xHvJoq3h3/uet6XCSsA0It5xpz56W17PaeMbvY1Z1pLAAD7jZxb/GzmFCQ181XSTg1DXHte/5Vp44H4qranvfd1/+/uk8pR3zsMAMB1o/c2Ks3jHufBIzk5DPDa1fHY2Mpso3Onx9+l/ZOC7xgGnn063Uhsq3zYpvJ99u5n98mx/gwAkE/lOdyot+g8Mi8GAFoSEpPC7FdJ6xwQj9dgMJpnwVjKGzAOALQzYu2U7VXRV428X2tfAKgnwrzpZ7PPTlCzg2EgLg8tItIuAeYzFgP81ns8XC0Qfjbq/j3XAKCeSPOon01QTCCCYQDox2SPq7QhAIhpRCjMb8JhAOCsiHMqITFTRQiGI3ZMQN/MJutEYoV2lrVuqGGFPgb04fkF7wmFxxtx6se4BwA1RZ5bOU3McBGC4W2L3TFhRfokEZkcAUAe5pPrUefXRXrlYVTKByAuYzSRZZlnCYrp7tfsCwBCyfBwhIx+Nv0LAKCCHht05onH3MvLZilAW8ZVVnDbcrX1x2s1Z6SJKCeGt02jhpmyfGKKWo60uUwTtncq3AMAwMqEwrEoOwDgjKxzCCeJaSJSMAyMJxAmg0qTnUr3AgCwEqFwTMoQADgj+764kJjTogXDmTsiZKO/wRwmbEAE5gEA+wmFY8u+sQsAzFNhHiEk5hDfMQzryf6go4ZV2uHzff48/LlKGQAA8DfzwD6yfWcgABDHfX6WfS5xv37zTd6KdmJ42zRY6En/qin7hOWTzPf2qr9V+BQiAAAAAFRUZe/OCWLeihgMA31UeKBF4IF63Qpt8ds9rlAGAAAVtJz/V9lojEz5AgAtVJlTeM00/4gaDFfpdEAdXsMBAAAQnwAeAGjhttWaVwiI2bYt9ncM+24YaOvTd5ru6WtVHoBnRP9e2KrjZeZ7itpWAADYr/VpYQAAcnqcy2Xes9w2B6CWFzkYBtq78tB6/rurPDiyP+ijWaXdbJtwGACA38wJ56j6AVoAYK773C77PENAvKior5K+0yAhruwPPmLTvgAAmKnVfNS+xlzKHwDopcqrpu3DLsaJYYD3PBTb2jtJqlTuPnkHAAAAALU97/1l29+0h7mQ6CeGt01DhKhW7ZvZHurEoN0AAOThtDAAAFdkPU38s9nHLC9DMLxt+ToPVHZ/oFV/QFS/P8YzsQIAWId9jDjUBQAw023LFxTbwywsSzAMzPf84MryEItulYes9vKHgBgAIC7ztJqsRwCAKLIExT9Pf1JEpmA4cgeByqI/oDJr+XCtUkcrTTRWulcAgJVUmZtXo14AgIgiB8X2LwvKFAwDY0V8EI0y44FX+SG7ajvaw+lhAAAAAOAuYkhs/7KQbMFwpI4AVUV76LCOlScYK987MIdxB6APa6nY1A8AkEmkkNg+QhHZguFti9EBoCr9a66KD1dtaj+nhwEA5jIXAwAgqgghsflyARmDYaC92Q8UMKn4Q1kAAEA/1r4AQHYzQ2J7l8llDYZN4qENgXA8lR6s2tZ5Tg8DAORj/gsAwGgz9vjtWyaWMRjW4KANmxavfRtjWpXbp9+z2ji32v0eoWwAyMozjGy0WQAAMhsdEJs/J5UxGL49/Qkcp/9AHiZZXKH9AGeZL3KUZw6ZGOMA/mVshBpGBsTWAAllDIYfeVjBcfpNDtkfqnvbWfb7hN6M2QCQg2c2AACR+BpJXsoeDAP7eRB8Fy2kjHY9zKMtAAAAAJHZu4CYeucC+n4yFYJhQRcwyozxJuOD1bgMUJtxHqgm45yb6zzPAICV9AyIzacTqRAMb5vJPHzipPA+3x5eM8uw6oO16n0BRGf8BQAAgDXJChZXJRgGXrttNn+vuG2C9aOUVT/6MgBATObAAABk0mPP295lEpWCYQsxeE3fOCdauVV7sFa7H4hMfwNmMf4AAADEFW0PnAEqBcPbphHDI/1hv9Gblmd/n81VtAEAICJzFAAAwLoggWrB8LYJw2Db9IPKIj9c97a7yPcAAPxhTglUZ5wD+NvVcdGeD+RjPrSYisEwwBEZJ6wRr9kEAvrRv2jp6jNEewQAAIBaWq71I+5d86BqMGzDipVp/230eoC1+rlZH7BZrxsAAAAAoCq5wiKqBsPbphED9f1sMYJW4+1YEeqcfLQbYBbjDwAAQA6t9nmtAwOrHAwDfFPlAZXlPrJcJ0BVxmGgh9XHFh+SBIC/rT43gGye+6z5bXHVg2ENGDgr2/gxa9KdrZyOum3175EctENgFuMP1dm8BoC/mf/BWvT5xVQPhrdNowZeE6S2scpGWrV6Y02r9Ff6MRYCAABAfdb/ha0QDG+bRsxaonzvbGa9x4xKY9Lee5nRJm8v/rn686LQxwHIxHOrLnULAAC8Yq0Q1CrBMKzIwPvenrLpXX6RQsazMt7D0ZB4z3dsZCwHYD3mBQAAwCjWHwBBrRQM27gH9rg9/clrR8pn1mnhnj9778/XjmhJewJmMf4AAKzF/A8wDhT1a/YFDHbbfFoJVvdtDPjZPPSial0vjz/vU7t41yaOhMOePURhjOMs7YarjD9UpW0DAABprHRi+M6CDfjmZ/NdzZ/MOC0c/Xufv/19zx5gJs8zoIcqY4t5GgD0UWWuAFDKisEwsK4zE1Ih8XyjNus+/Z4z9W+TkaiMZwAAAAB8c3V/0x5UQKsGwzbrgTM8yOacFh5Z7leeD7enf1r+bLjTjphBu2Pb2rQDcykAgDysAwAKWjUYBiCXkae23wW7rX52KzbX16TeOSrjh3SA+IwJAFBfi+e9OQNAMCsHwz7xRHXa+N9GTkR/3vyTXYQ2leX0MPTSql1WGJMYy5gIQEXmRADvWQMAFLRyMLxtfU+FATV92jj4FgCvtOnQ816zB+2eO1ylDbFXi7FSe+OR10mzbeoQAFZi/gdQzOrBMFQ1axM36kRvxHVFvfdWRrepT9/VezeizPdcx9mfC7NVH7cAYBTPVAAAIAXB8G826OGa7Cc4rzh67xnL6egY2fo7aG5bv4AWstIX+Cbj84Z1aJ8AAAAwgWD4DxusVDG6LUff2Ov9SuOzfy96uUVWJSTOfv3UYCziE+MUr2gXa/PcAID1eJ00QCGC4b/Z5IBjok/qel3fSsHubZt3InqFMvbcAXpYYfwkP+00n8p1Zk62psptGiAi4y5HHG0v2hfs9Gv2BQR0NASBSEZuaOgn65i5Ufaundm8g3Zzlp9Nn+Jf2gTwyNz/O89TACqzZ85IP09/Ag05MfyaxRx85qG8hhnfLXzkd1U5ue2ZA7TUalysML7Sj2fXetQ5ANCCdQZ7mHtCR4Jh4KjR4d+Mv0suFQJiE17OatV2svch2jMuMYKxJw91RTXaNAAASxIMv2czjGyutNm9i+Jv/12UfmORf13k08LvZA+Iz/SfzPcLtNdqTIjyPGcNnmVE0WLs054BqMwHkwEKEAx/ZlOM6o4EaaMnbSaJ82Qf+7IHxHCUxTkwQ/b5Avt5PgAAABQhGP7OhgdVHdngybQZlOlaq1Dm7XjmAGc5LUxm5hJxqZvjlFl86gjgPB9MBkhOMLyPDTKqqRoKc12F8e625b6PzNfOPBbna1NvzOKZBQDAWdYxABP8mn0Bidw2Dyvye9eG323qHWnzLTcGf57+fe/P1kevuY9zR+pyZJnbfIYxjo4D1KHemcnYE8uq82rr/vrUL8B1LZ+X5oAQ29W+rn8H5MTwMRoxmX0KhV/9b9kWzNmuN6qI41z2E8BnrHa/tKHdrMnzj9mMPTWp12uMzQAAQEiC4eMskInq0+bDt5PC2jVn2oANr770S2bSv3NoWU/GHCIw9sSxcl0YD+tauV0DtNbrzYEAdCYYhtp+tnOTq6N/p/dk8Nv1mEDWdrYdV2BjkplW7XdZqB8isTFYizpoQznGoj4AAGATDJ9lo56onr+b9xPtmLssp4V/nv5Zhb7KEa3by0p9bWXGGeDOuA8A7OXDgVCbflmUYPg8G2hEtSc0y9h+392TB9Q1GdvCitQTR2gv9XmFNBHZGKSSVu1ZW45BPQDkYLyGWuw3BCUYvkbDpqJor5E+8r9zzNm6i1APK46/t23N+2a+CH2eP9QHq9DWx1PmfSjXuZQ/QF/eWgU16YuFCYavs0lPNjPabK8HiQfUeoSjyoB9LM5ral0PxhJaM/bkpaz/5RQ8AOxjDgiQiGC4DZtqZNG6re75eXsnc0cnfSaJ12Q+LRzhGiIQEPONxXktI0JhdUxE2mV/yngM5TyeMgfIyxgO8+h/xQmG27E5T3QtQ9zZslxnVFnHq9vTn8B4xt85RpW78ZUWtKNcjOufac95adsAY/V4ZhrLIS/z6MB+zb6AYm6bBxZ59Wi7P0///u6BcOR362PXXHkozy77s7/fRISV9ZibfBrPaa/H2Kv+6K312GPc6WP23G5F2vIY2jbAHNaf67jXc7S60V7OeSw386gFODHcnoGHiCp9rzDnZQ6Fz/CqZfjNJ7fzEgrDHz+bsaclZbmfr2bIRfkCzGX9WV/0+oh+fRG1DoXtOwQnGO5Dwyeanx3/QBUCYfiXxXk+ypfsej6L9Y9repWf+dd+2nAfyhWgLmN8DFnqIct1whSC4X4silnZu4evh/I8q5wWNvbCWJnGh0yENlTR60Mp2vJ5xpdzfMAqPuUJEEeveYGxfq5s5Z/temdzWnghguG+dAKqe/XAOPoQ8ZDub5VQ+C7jNcMIFuc5CG3gO+POOcaXeLTlNpQjQDw915/G/bEyl3nmax9JGS1GMNyfRTLV/bz59z3/PbFlq6vb05/AvyzOYxPaUJEPpcSgvK7TluMx/wBYl/F/jCrlXOU+elA2CxIMj2EzjuqOLsh/nv6kn7Pjj7qBunzvZzw2tqnOh1Lm6V1GK6x1H8tPOByHMgOIr/c8wbOgr2rla+3wtx7lscLaoATB8Dg6BfzNg7i/1ULhnzf/AGPpd8f0Li9zUKLwoZTxjC9tjLpP7Xg/ZQWQh3A4p8rlWvneYJdfsy9gMbfNwAOMscpG3R7vxl1lxMp6z0nuP1s/e2/EnFD5E03Psedn0+bvrDn76t2O77+Df2nbADlZf+axyrN25TbjK6wQDE8gHAZ6u/IgXml8Esqwunv77L1A1w/+ZfyBPka88je6UXO5Vcv3bsQG9+pl/GilNQpAVSP2xFcO+1pY8Xm72pxrxTrmBa+SnmOlwQYYSygcizIluhFt1Gvd/xhVFuaaRKZ99jFyrFWHv414Nabn59gy0LYB+hr59QyeofutXl4rfB1d7/szh0pGMDzPbdNhgLaEwvEY54lu5Hyk+kLrE4EN/DHqU/mrjDmj79MY87dRbXlF2jZATSPH21Xmg2cpn39VLJPe92MOlZBgeD4dB2hBKNzX0fDMh3/IxuK8D5va8K/b05+9VR5zRt+XMea1kR90qNqWH824T20bYJwZr+5d5Rl6hPL4rEKbGXEP5lBJ+Y7hGHzvMHCFh3Bbz9+7env6396N1+qB7EbPRyp//9OMeV3FcqS+keNOlTFn1roxe7n1pi1fM3M/pFI5AmTw+CHB0eN/xWfoUTKIYx7LK0O78cF0dhEMxyEcBs64+hA27rz3rmxNfKhs5uL8/vszE9jAcT6Uso/gjGdZ2/JdhHVI1rIDqGLWfnj2Z+gR9xPaEZ672UXeu1C/HCIYjsUgDRwhFAZ6mDkfybhAnz2WZioreMeHUt4zxuQxe3P7fg2RzW7Pj6KXFcAqrD/7+Xn6k3aey3TG69FnqtpnliEYjkc4DOwhFAZ6en6l+mizF1mfRBo/I5VLBJHqZtvmfH9aZhE2Be/XMVOkdjy7LDKavZ6P9vyM1J4fzS6XCFo+o6LVs+dvf1nLONp1R7uemTw/24o2Lq+gx9fORa3H7P2DbdtuPz9R29fyVAzwTosHsDHmPRMc+FvE8WJUP41473fZx6rIZdta9roaLWLb6FmHEe93287f89X7qdJfqtXrN1Hv95VvZZDhXnxIeB/jST4rPm9by97uo9ZThnKt+LVGUdvDyjL0BXZwYjiu2Sd1gJhaPoBnfyITyCHiWPHteo6MldHu7ZsqC7GI7aqHKvU1UsS28el6KoRMz7Tb66Ku56Ndz0hV2nWV+2C/iM/FjJRjDlmen7PH4mjlwxpmt3saEgzHdX+diIkLcNc6FH78c/VxxuQGPss2H8l0rUcYq1hFpvlJhms8wjjTVrbnZ1XaNUAu0Z+fVz402OJ3wEjmUQUJhuO6Pf27hwGsrfdDONMGLDCHcWIuizFWZB00jjGmH+14Lm0bIKes689s13tFxGeseVdbEeuYBv6bfQHsdj89DKxnZN9fdaz52UwcYa8Vx4iZVh2X4U77708Z96eMx/P8BKjBWB5T5HoxB2hDGRYmGM7hMazQIWEts/r8qpOoluGwoJnKVh0jRlLG8If+0I9yHUc7Hkc5A9RiXI8j03wmy3VGk6mOOUkwnMNzR9QxYQ0R+nqEaxjtSqD7s/19+lg4THUrjhEjKFd4Td9ox4bPPMq9H+0aoC5j/HwZy1+7OUZZLcJ3DOflfflQW4sH8X2MuPqzsn6vyxU/2+tyO1IGJlOsYsUxohfjBnxnzLnGOBODdtyWdg2wDs/Q8So8Z7Wb7yrUMzs5MZybT7xATS1D4fu/t5j4GHP2U06sSLs/z/gKx+kzxymzeIz/1yg/gHUZ/8eoVs7mDn+7Pf3JIpwYrsHpYaijdSj86v/f6gTxp99V0d57NZliZauOD2cZL+Aan/zfx1gTn7Z8jDYNwLZZf/ZU/Vlr7iUUXppguA7hMOTXMxR+9d+0+H1Vx54zi4vHSaVJFVhofWKMgLaMN68Za/LRlj/TpgF4xzO0nZWet6u1m5Xqlg8Ew7VUDWhgBaNC4Vf/ve8gfu3s9wmbZMHfqo4RZxgfoC/jjXGmCm35b9o1AHt5hp638vO2+unzleuWFwTD9Xj4QT4zQuFXf1dA/MfZUBh4r/pC6xPjxL9WawOMteJ4Y5ypqdL8+ihtGoArVn6GHuWZ+7cqbUe98pZguC6nhyGH2aHwq58jIN7PJAvOWSG0MT58Zq7KKNXHG2PNGqq34zvtGYDWVnmGHuWZ+91zGWVoP+qVXW4/PxnaMxeoYIgrUij8SqvJRMVxyEQL+sg+XhgbII+s4030ceZquUa/v4iytuVtU98AzJP5+XmFZ29bM9uRuuQ0wfA6VDTEEj0Ufpbtensy8YJxoo8bxgOowVjTjmB4vsjtWf0CEFHkZ2cLnr9ztGpX6o/mBMNrUdkQQ+aQNfO1X2UiBjHMGEP0f1hP5rnWTILhuLJ9qBQAZsm6b3XnOQx8JBhek0qHeaq8nnm1gNikGnI5Mr7o38BZxpp/CYYBgIoi72GZPwGHCIbXpeJhvCqh8KOK9/TMBBsAYB/BMACwop77WuZHQFOC4bWpfBineoBa8f5MvAEA9msxjzP/AgAA6Oi/2RfAVLfNwhtGqBiaPvvZam0GRrkOAIBVmH8BAAB09mv2BRDCbYsdOEFmK4TCjx6v8+y9P/690fdtQxIAAAAAgJKcGObO6WFob7VQ+FmLU8QjxyZjIADAOVnnqwAAAEsRDPNMMAJtrB4KP4oeEPtgDADANeZSAAAACXiVNK/cF/UVAimYQSj8WsvXTLcqG5uYAADXVZu3AgAAlCQY5hMBMRwnFN7nfn+zAmKBMAAAAAAAS/EqafYQoMA+QuHjrr5m+uhroL02GgAAAACAJTkxzF5OD8N7LYPGVfvYiBPEAmEAgJjM0wAAAAYQDHOUgBj+JhRuq1VA3OJnAQDwnTksAABAEoJhzrptNgCgJf3pb4/l0SIkBgAAAACApfmOYa7wXZ2szncKj3H1e4gBAAAAAGB5TgzTgtdLsxqvj56jxSliAADaaTGXNa8DAAAYxIlhWrKgZwVC4RicIgYAAAAAgAMEw7Tm9dJUJhQGAAAAAABSEgzTi4CYarRnAAD4w2ukAQAAkvEdw/Tm+4epoPWGlf5wjQ1EAAAAAAA4SDDMKAJishIKxyEQBgCIwZwWAAAgIcEwowmIyUQoHINAGACgHnM8AACAwQTDzCIgJrqWG1Xa+Tk2CwEA4jG3BQAASOq/2RfA8gQ/RKRdznXb1AEAQGXmegAAABM4MUwETg8TydFNqp8Pf0ebPsYGIQBAbOa3AAAAiQmGieQxFLLhwAxngklh5nXKEAAgPms0AACA5ATDROUUMaO1Die13e8EwgAA6zEHBAAAmEQwTHQCYkYQCo9lMxAAIBfzWwAAgAIEw2QhIKYXofA4AmEAgHxazm/NBwEAACYSDJONgJiWhMJj2AAEAMjJ/BYAAKAQwTBZPQZNNis4QyjclzAYAIBH5ocAAACTCYapwClijhIK92PDDwCgBnNcAACAYgTDVCIg5pseoaX2JgwGAKim9RzXfBEAACAAwTAVec00rwiF27PBBwBQj1AYAACgKMEw1TlFzLYJhVuysQcAUNeqc1wAAIAlCIZZhVPE6xIKtyEQBgCorccc1xwSAAAgEMEwKxISr0MofI2NPACA+nrNb80lAQAAghEMszohcV1C4XNs4AEA2T3O2R6/WsY8518rzG8BAAD4f4Jh+MP3EdchFD7GJikAUMXznO3+f5vv/Kvn/FZ5AwAABCQYhn85RZybUHgfm3UAwEoExH9UnNsCAACwg2AYPhMS5yIU/sxGKABQ2Z552+oB8Yi57aplCwAAEJ5gGPYTEscmFH7NxhwAwL9WC4gFwgAAAAiG4aTnTY8KAWJmQuG/2ZQDAFZzdu72+PcqzqFGzWkrlh0AAEA5gmFoQ1A8j1DYRhwAQAtVQuLRc9nMZQUAALAUwTD04bXTY6wcCtuAAwD4rcf8LdurprPMYQEAAJhIMAz9OU3cXq8Nuqh1k2VDEgCgmuf5YbR52ez5a7TyAAAA4APBMIwnKI4pUj3YYAMA2Gf0HO7V7xs5dzNnBQAA4DTBMMz3akMl0oZPJFVPCttUAwDIa89ccu98b/a8dC/zVwAAgIQEwxCTsPhfVUJhm2gAAG1kmh9nutZvzGcBAACSEgxDHiuHxRlDYRtmAABUYn4LAACQnGAYcnu3OVMpMM4QCtskAwAYq9J8NwPzXQAAgAIEw1DTp42bTJtokUJhm2EAADH8bL/nZpnmtVmZAwMAABQiGIb17NncibDJNnITyoYXAEAet6c/I8xdKzJHBgAAKOb282MNDVzWeiC5nwCxGQUAwF4Wt22YgwMAABQlGAYAAKASi9zzhMIAAACFeZU0AAAAlXjF9HECYQAAgAUIhgEAAKjoMewUEr8mEAYAAFiIYBgAAIDqnCL+m0AYAABgQYJhAAAAKvnZ3gefK58iFgYDAAAsTjAMAABAJXsD0FVCYoEwAAAA27YJhgEAAKBaSCwMBgAA4B+CYQAAAPjjOVTNEBQLggEAAPhKMAwAAADvvQtdZwXGQmAAAABOEQwDAADAcUcD2m9BssAXAACArv4P8UBcMl+61j0AAAAASUVORK5CYII=" alt="Noisy Beast Logo" class="logo logo-left">
+            <div class="header-center">
+                <h1>CALCUL8R</h1>
+                <p>Integrated Marketing Performance Calculator</p>
+            </div>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA+gAAAPoCAYAAABNo9TkAAAYCElEQVR4nO3XMQEAIAzAMMC/5yFjPRIFfXtn5gAAAAC73nYAAAAAYNABAAAgwaADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAQYdAAAAAgw6AAAABBg0AEAACDAoAMAAECAQQcAAIAAgw4AAAABBh0AAAACDDoAAAAEGHQAAAAIMOgAAAAQYNABAAAgwKADAABAgEEHAACAAIMOAAAAAQYdAAAAAgw6AAAABBh0AAAACDDoAAAAEGDQAQAAIMCgAwAAQIBBBwAAgACDDgAAAAEGHQAAAAIMOgAAAAR8sScKzeB8udoAAAAASUVORK5CYII=" alt="Nutra Organics Logo" class="logo logo-right">
+        </div>
+
+        <!-- Campaign Impact Summary (Always Visible) -->
+        <div class="card">
+            <h2 style="color: #1e3a8a; margin-bottom: 20px; font-size: 24px; font-weight: 700;">Campaign Impact Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-stat">
+                    <div class="label">Base Revenue</div>
+                    <div class="value" id="summaryBaseRevenue">$0</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="label">Campaign Revenue</div>
+                    <div class="value" id="summaryCampaignRevenue">$0</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="label">Incremental Revenue</div>
+                    <div class="value" id="summaryIncremental">$0</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="label">ROI</div>
+                    <div class="value" id="summaryROI">0x</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scenario Selection -->
+        <div class="card">
+            <h3 style="color: #1e3a8a; margin-bottom: 15px; font-size: 18px; font-weight: 700;">Select Scenario</h3>
+            <div class="scenario-pills">
+                <div class="scenario-pill active" onclick="loadScenario('realistic')">Realistic</div>
+                <div class="scenario-pill" onclick="loadScenario('conservative')">Conservative</div>
+                <div class="scenario-pill" onclick="loadScenario('optimistic')">Optimistic</div>
+                <div class="scenario-pill" onclick="loadScenario('custom')">Custom</div>
+            </div>
+        </div>
+
+        <!-- Section 2: Media Plan Overview -->
+        <div class="section" id="section-media">
+            <div class="section-header" onclick="toggleSection('section-media')">
+                <h2>📊 Media Plan Overview</h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="input-group">
+                    <label>Total Investment ($)</label>
+                    <input type="number" id="totalInvestment" value="1500000" oninput="calculate()">
+                </div>
+                <div class="summary-grid">
+                    <div class="summary-stat">
+                        <div class="label">Unique Reach</div>
+                        <div class="value" id="uniqueReach">0</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="label">Avg Frequency</div>
+                        <div class="value" id="avgFrequency">0x</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="label">Total Impressions</div>
+                        <div class="value" id="totalImpressions">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Baseline Performance -->
+        <div class="section" id="section-baseline">
+            <div class="section-header" onclick="toggleSection('section-baseline')">
+                <h2>📈 Baseline Performance (BTL Only, No Brand Campaign)</h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div class="input-group">
+                        <label>Baseline Revenue (BTL only) ($)</label>
+                        <input type="number" id="baseRevenue" value="8400000" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label>Site Visitors (May-Aug 2024)</label>
+                        <input type="number" id="siteVisitors" value="1100000" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label>Baseline CVR (%)</label>
+                        <input type="number" id="baseCVR" value="3.5" step="0.1" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label>Average Order Value ($)</label>
+                        <input type="number" id="aov" value="22.4" step="0.1" oninput="calculate()">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: BTL Channel Performance & Brand Halo Effect -->
+        <div class="section" id="section-btl">
+            <div class="section-header" onclick="toggleSection('section-btl')">
+                <h2>💰 BTL Channel Performance & Brand Halo Effect</h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <!-- Brand Halo Slider -->
+                <div class="slider-container" style="background: #fef3c7; padding: 20px; border-radius: 10px; border: 2px solid #fbbf24; margin-bottom: 30px;">
+                    <div class="slider-label">
+                        <span style="color: #92400e; font-size: 16px;"><strong>🌟 Brand Halo ROAS Lift</strong></span>
+                        <span class="slider-value" id="haloLiftValue">15%</span>
+                    </div>
+                    <input type="range" id="haloLift" min="0" max="30" value="15" step="1" oninput="updateHaloLift(); calculate();">
+                    <p style="color: #78350f; font-size: 13px; margin-top: 8px;">How much does brand campaign improve BTL channel efficiency?</p>
+                </div>
+
+                <h3 style="color: #1e3a8a; margin-bottom: 20px; font-size: 18px; font-weight: 700;">BTL Channels (May-Aug 2024)</h3>
+                <div class="btl-grid">
+                    <!-- Meta Ads -->
+                    <div class="btl-channel">
+                        <h4>Meta Ads</h4>
+                        <div class="input-group">
+                            <label>Budget ($)</label>
+                            <input type="number" id="metaBudget" value="200000" oninput="calculate()">
+                        </div>
+                        <div class="input-group">
+                            <label>Baseline ROAS</label>
+                            <input type="number" id="metaROAS" value="3.0" step="0.1" oninput="calculate()">
+                        </div>
+                        <div class="btl-comparison">
+                            <span class="btl-before" id="metaBefore">$0</span>
+                            <span class="btl-arrow">→</span>
+                            <span class="btl-after" id="metaAfter">$0</span>
+                        </div>
+                    </div>
+
+                    <!-- Google Ads -->
+                    <div class="btl-channel">
+                        <h4>Google Ads</h4>
+                        <div class="input-group">
+                            <label>Budget ($)</label>
+                            <input type="number" id="googleBudget" value="250000" oninput="calculate()">
+                        </div>
+                        <div class="input-group">
+                            <label>Baseline ROAS</label>
+                            <input type="number" id="googleROAS" value="6.7" step="0.1" oninput="calculate()">
+                        </div>
+                        <div class="btl-comparison">
+                            <span class="btl-before" id="googleBefore">$0</span>
+                            <span class="btl-arrow">→</span>
+                            <span class="btl-after" id="googleAfter">$0</span>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="btl-channel">
+                        <h4>Email Marketing</h4>
+                        <div class="input-group">
+                            <label>Budget ($)</label>
+                            <input type="number" id="emailBudget" value="30000" oninput="calculate()">
+                        </div>
+                        <div class="input-group">
+                            <label>Baseline ROI</label>
+                            <input type="number" id="emailROI" value="62" step="1" oninput="calculate()">
+                        </div>
+                        <div class="btl-comparison">
+                            <span class="btl-before" id="emailBefore">$0</span>
+                            <span class="btl-arrow">→</span>
+                            <span class="btl-after" id="emailAfter">$0</span>
+                        </div>
+                    </div>
+
+                    <!-- Influencers -->
+                    <div class="btl-channel">
+                        <h4>Influencer Marketing</h4>
+                        <div class="input-group">
+                            <label>Budget ($)</label>
+                            <input type="number" id="influencerBudget" value="150000" oninput="calculate()">
+                        </div>
+                        <div class="input-group">
+                            <label>Baseline ROAS</label>
+                            <input type="number" id="influencerROAS" value="1.5" step="0.1" oninput="calculate()">
+                        </div>
+                        <div class="btl-comparison">
+                            <span class="btl-before" id="influencerBefore">$0</span>
+                            <span class="btl-arrow">→</span>
+                            <span class="btl-after" id="influencerAfter">$0</span>
+                        </div>
+                    </div>
+
+                    <!-- Trade Marketing -->
+                    <div class="btl-channel">
+                        <h4>Trade Marketing</h4>
+                        <div class="input-group">
+                            <label>Budget ($)</label>
+                            <input type="number" id="tradeBudget" value="150000" oninput="calculate()">
+                        </div>
+                        <p style="color: #64748b; font-size: 13px; margin-top: 10px;">No trackable ROAS available</p>
+                    </div>
+
+                    <!-- WW Retail Media -->
+                    <div class="btl-channel">
+                        <h4>WW Retail Media</h4>
+                        <div class="input-group">
+                            <label>Budget ($)</label>
+                            <input type="number" id="wwBudget" value="120000" oninput="calculate()">
+                        </div>
+                        <p style="color: #64748b; font-size: 13px; margin-top: 10px;">No reliable ROAS insights</p>
+                    </div>
+                </div>
+
+                <!-- BTL Summary -->
+                <div class="summary-grid" style="margin-top: 30px;">
+                    <div class="summary-stat">
+                        <div class="label">Total BTL Spend</div>
+                        <div class="value" id="btlTotalSpend">$0</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="label">Baseline BTL Revenue</div>
+                        <div class="value" id="btlBaselineRevenue">$0</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="label">BTL w/ Brand Halo</div>
+                        <div class="value" id="btlHaloRevenue">$0</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="label">Halo Effect Value</div>
+                        <div class="value" id="btlHaloValue">$0</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="label">Baseline BTL ROAS</div>
+                        <div class="value" id="btlBaselineROAS">0x</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="label">Untracked Spend</div>
+                        <div class="value" id="btlUntrackedSpend">$0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 5: Brand Campaign Parameters -->
+        <div class="section" id="section-campaign">
+            <div class="section-header" onclick="toggleSection('section-campaign')">
+                <h2>🎬 Brand Campaign Parameters</h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <!-- Traffic Lift -->
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Traffic Lift from Brand Campaign (%)</span>
+                        <span class="slider-value" id="trafficLiftValue">25%</span>
+                    </div>
+                    <input type="range" id="trafficLift" min="0" max="100" value="25" step="1" oninput="updateTrafficLift(); calculate();">
+                    <p style="color: #64748b; font-size: 13px; margin-top: 5px;">Typical: +10–30% lift in site traffic from a strong, well-supported brand campaign.</p>
+                </div>
+
+                <!-- CVR Lift -->
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>CVR Lift (percentage points)</span>
+                        <span class="slider-value" id="cvrLiftValue">0.3pp</span>
+                    </div>
+                    <input type="range" id="cvrLift" min="0" max="2" value="0.3" step="0.1" oninput="updateCvrLift(); calculate();">
+                    <p style="color: #64748b; font-size: 13px; margin-top: 5px;">Typical: +0.1–0.5 percentage points (e.g. 3.5% → 3.6–4.0%) for brand-primed traffic.</p>
+                </div>
+
+                <!-- Brand Search Lift -->
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Brand Search Lift (%)</span>
+                        <span class="slider-value" id="brandSearchLiftValue">40%</span>
+                    </div>
+                    <input type="range" id="brandSearchLift" min="0" max="100" value="40" step="5" oninput="updateBrandSearchLift(); calculate();">
+                    <p style="color: #64748b; font-size: 13px; margin-top: 5px;">Typical: +20–60% increase in branded search volume after strong ATL activity.</p>
+                </div>
+
+                <!-- Sampling Conversion -->
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Sampling Conversion Rate (%)</span>
+                        <span class="slider-value" id="samplingConversionValue">20%</span>
+                    </div>
+                    <input type="range" id="samplingConversion" min="0" max="50" value="20" step="1" oninput="updateSamplingConversion(); calculate();">
+                    <p style="color: #64748b; font-size: 13px; margin-top: 5px;">Typical: 5–20% of samplers go on to purchase, depending on product and channel.</p>
+                </div>
+
+                <!-- Sampling Distribution -->
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Samples Distributed</span>
+                        <span class="slider-value" id="samplesDistributedValue">500,000</span>
+                    </div>
+                    <input type="range" id="samplesDistributed" min="0" max="1000000" value="500000" step="50000" oninput="updateSamplesDistributed(); calculate();">
+                    <p style="color: #64748b; font-size: 13px; margin-top: 5px;">Set based on your actual sampling plan (e.g. on-pack, events, retail demos).</p>
+                </div>
+
+                <!-- Attention Rate -->
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Ad Attention Rate (%)</span>
+                        <span class="slider-value" id="attentionRateValue">35%</span>
+                    </div>
+                    <input type="range" id="attentionRate" min="0" max="100" value="35" step="5" oninput="updateAttentionRate(); calculate();">
+                    <p style="color: #64748b; font-size: 13px; margin-top: 5px;">Typical: 25–45% of reached audience actively notice and process the ad.</p>
+                </div>
+
+                <!-- Target Market Size -->
+                <div class="input-group" style="margin-top: 20px;">
+                    <label>Target Market Size</label>
+                    <input type="number" id="targetMarket" value="3500000" oninput="calculate()">
+                    <p style="color: #64748b; font-size: 13px; margin-top: 5px;">Total addressable market for your category/region</p>
+                </div>
+
+                <!-- Awareness Lift -->
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Awareness Lift from Campaign (%)</span>
+                        <span class="slider-value" id="awarenessLiftValue">45%</span>
+                    </div>
+                    <input type="range" id="awarenessLift" min="0" max="100" value="45" step="5" oninput="updateAwarenessLift(); calculate();">
+                    <p style="color: #64748b; font-size: 13px; margin-top: 5px;">% increase in brand awareness (typical: 35-55%)</p>
+                </div>
+
+                <!-- Consideration Rate -->
+                <div class="slider-container">
+                    <div class="slider-label">
+                        <span>Awareness to Consideration Rate (%)</span>
+                        <span class="slider-value" id="considerationRateValue">30%</span>
+                    </div>
+                    <input type="range" id="considerationRate" min="0" max="100" value="30" step="5" oninput="updateConsiderationRate(); calculate();">
+                    <p style="color: #64748b; font-size: 13px; margin-top: 5px;">% of aware people who actively consider (health/wellness: 30-40%)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Campaign Funnel Analysis -->
+        <div class="section" id="section-funnel">
+            <div class="section-header" onclick="toggleSection('section-funnel')">
+                <h2>🎯 Campaign Funnel Analysis</h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <!-- Stage 1: Reach -->
+                <div class="funnel-stage">
+                    <h4>Stage 1: Reach</h4>
+                    <div class="metric-row">
+                        <div class="metric">
+                            <div class="metric-label">Unique Reach</div>
+                            <div class="metric-value" id="funnelReach">0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">% of Target Market</div>
+                            <div class="metric-value" id="funnelReachPct">0%</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Total Impressions</div>
+                            <div class="metric-value" id="funnelImpressions">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 2: Awareness -->
+                <div class="funnel-stage">
+                    <h4>Stage 2: Awareness</h4>
+                    <div class="metric-row">
+                        <div class="metric">
+                            <div class="metric-label">People Made Aware</div>
+                            <div class="metric-value" id="funnelAware">0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Awareness Lift</div>
+                            <div class="metric-value" id="funnelAwarenessLift">0%</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">New Awareness</div>
+                            <div class="metric-value" id="funnelNewAwareness">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 3: Consideration -->
+                <div class="funnel-stage">
+                    <h4>Stage 3: Consideration</h4>
+                    <div class="metric-row">
+                        <div class="metric">
+                            <div class="metric-label">People Considering</div>
+                            <div class="metric-value" id="funnelConsidering">0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Additional Traffic</div>
+                            <div class="metric-value" id="funnelTraffic">0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Brand Searches</div>
+                            <div class="metric-value" id="funnelBrandSearches">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 4: Conversion -->
+                <div class="funnel-stage">
+                    <h4>Stage 4: Conversion</h4>
+                    <div class="metric-row">
+                        <div class="metric">
+                            <div class="metric-label">New Customers (Traffic)</div>
+                            <div class="metric-value" id="funnelNewCustomers">0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">CVR w/ Brand</div>
+                            <div class="metric-value" id="funnelCVR">0%</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Sampling Conversions</div>
+                            <div class="metric-value" id="funnelSamplingConv">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 5: Revenue Impact -->
+                <div class="funnel-stage">
+                    <h4>Stage 5: Revenue Impact</h4>
+                    <div class="metric-row">
+                        <div class="metric">
+                            <div class="metric-label">Traffic Revenue</div>
+                            <div class="metric-value" id="funnelTrafficRevenue">$0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Sampling Revenue</div>
+                            <div class="metric-value" id="funnelSamplingRevenue">$0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">BTL Halo Revenue</div>
+                            <div class="metric-value" id="funnelBTLHaloRevenue">$0</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Total Incremental</div>
+                            <div class="metric-value" id="funnelTotalIncremental">$0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: Incremental Revenue Breakdown (Always Visible) -->
+        <div class="card">
+            <h2 style="color: #1e3a8a; margin-bottom: 20px; font-size: 24px; font-weight: 700;">Incremental Revenue Breakdown</h2>
+            
+            <!-- BTL Halo Effect -->
+            <div class="revenue-item">
+                <h4>🌟 BTL Halo Effect</h4>
+                <div class="amount" id="revenueHalo">$0</div>
+                <div class="description">Brand campaign makes existing BTL channels more efficient</div>
+            </div>
+
+            <!-- Traffic & CVR Lift -->
+            <div class="revenue-item">
+                <h4>📈 Direct Traffic & CVR Lift</h4>
+                <div class="amount" id="revenueTraffic">$0</div>
+                <div class="description">Additional site traffic and improved conversion rates from brand awareness</div>
+            </div>
+
+            <!-- Sampling -->
+            <div class="revenue-item">
+                <h4>🎁 Sampling Conversions</h4>
+                <div class="amount" id="revenueSampling">$0</div>
+                <div class="description">Revenue from trial product sampling program</div>
+            </div>
+
+            <div class="summary-grid" style="margin-top: 25px;">
+                <div class="summary-stat" style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-color: #10b981;">
+                    <div class="label">Total Incremental</div>
+                    <div class="value" style="color: #059669;" id="revenueTotalIncremental">$0</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="label">Campaign ROI</div>
+                    <div class="value" id="revenueROI">0x</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 8: Total Marketing Performance -->
+        <div class="card">
+            <h2 style="color: #1e3a8a; margin-bottom: 20px; font-size: 24px; font-weight: 700;">Total Marketing Performance (ATL + BTL)</h2>
+            <div class="summary-grid">
+                <div class="summary-stat">
+                    <div class="label">Total Marketing Spend</div>
+                    <div class="value" id="totalMarketingSpend">$0</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="label">Total Revenue (w/ Brand)</div>
+                    <div class="value" id="totalRevenue">$0</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="label">Blended ROAS</div>
+                    <div class="value" id="blendedROAS">0x</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="label">Marketing Efficiency</div>
+                    <div class="value" id="marketingEfficiency">0%</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div>
+                    <h3 style="color: #64748b; font-size: 16px; margin-bottom: 15px; font-weight: 600;">Spend Allocation</h3>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 10px;">
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
+                            <span style="color: #64748b;">Brand (ATL):</span>
+                            <span style="color: #1e3a8a; font-weight: 700;" id="atlSpendPct">0%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                            <span style="color: #64748b;">Performance (BTL):</span>
+                            <span style="color: #1e3a8a; font-weight: 700;" id="btlSpendPct">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: #64748b; font-size: 16px; margin-bottom: 15px; font-weight: 600;">Revenue Attribution</h3>
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 10px;">
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
+                            <span style="color: #64748b;">BTL Baseline:</span>
+                            <span style="color: #1e3a8a; font-weight: 700;" id="btlRevenuePct">0%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
+                            <span style="color: #64748b;">BTL Halo:</span>
+                            <span style="color: #1e3a8a; font-weight: 700;" id="haloRevenuePct">0%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                            <span style="color: #64748b;">Direct Brand Impact:</span>
+                            <span style="color: #1e3a8a; font-weight: 700;" id="directRevenuePct">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 9: Model Assumptions & Methodology -->
+        <div class="section" id="section-assumptions">
+            <div class="section-header" onclick="toggleSection('section-assumptions')">
+                <h2>📚 Model Assumptions & Methodology</h2>
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="section-content" contenteditable="true">
+                <div class="assumptions-box">
+                    <h4>5-Stage Funnel Model</h4>
+                    <ul>
+                        <li><strong>Stage 1 - Reach:</strong> Total unique people exposed to brand campaign (1.2M reach at 9.4x frequency)</li>
+                        <li><strong>Stage 2 - Awareness:</strong> Percentage of reached audience who become aware of brand (attention rate × reach)</li>
+                        <li><strong>Stage 3 - Consideration:</strong> Aware audience who actively consider purchasing (driving site traffic and brand searches)</li>
+                        <li><strong>Stage 4 - Conversion:</strong> Consideration converts to customers via improved site CVR and sampling program</li>
+                        <li><strong>Stage 5 - Revenue Impact:</strong> New customers generate revenue through AOV, compounded by BTL halo effect</li>
+                    </ul>
+                </div>
+
+                <div class="assumptions-box" style="margin-top: 20px;">
+                    <h4>BTL Halo Effect</h4>
+                    <ul>
+                        <li>Brand campaigns typically improve performance channel efficiency by 10-30% (Binet & Field, IPA Databank (2021 update))</li>
+                        <li>Applied to trackable BTL channels: Meta, Google, Email, Influencers</li>
+                        <li>Halo effect represents brand awareness making paid channels more efficient</li>
+                        <li>Not applied to Trade Marketing or WW Retail Media (no baseline ROAS data)</li>
+                    </ul>
+                </div>
+
+                <div class="assumptions-box" style="margin-top: 20px;">
+                    <h4>Attribution & Time Lag</h4>
+                    <ul>
+                        <li><strong>Attribution Window:</strong> 4-month campaign period (May-Aug 2024)</li>
+                        <li><strong>Baseline Period:</strong> Historical performance before brand campaign</li>
+                        <li><strong>Long-term Value:</strong> Model shows immediate impact only; brand campaigns typically have 2-3 year tail effects</li>
+                        <li><strong>Incrementality:</strong> All incremental revenue represents lift above BTL-only baseline</li>
+                    </ul>
+                </div>
+
+                <div class="assumptions-box" style="margin-top: 20px; background: #f0f9ff; border-color: #3b82f6;">
+                    <h4>Research Foundation</h4>
+                    <ul>
+                        <li><strong>Binet & Field, IPA Databank (2021 update):</strong> "The Long and the Short of It" - Brand campaigns drive 10-30% performance uplift</li>
+                        <li><strong>Mark Ritson:</strong> Brand building compounds performance marketing effectiveness</li>
+                        <li><strong>IPA Databank:</strong> Integrated campaigns show higher ROI than performance-only approaches</li>
+                        <li><strong>Ehrenberg-Bass Institute:</strong> Mental availability drives category growth and conversion rates</li>
+                    </ul>
+                </div>
+
+                
+                <div class="assumptions-box" style="margin-top: 20px; background: #ecfeff; border-color: #06b6d4;">
+                    <h4>Marketing Efficiency (%)</h4>
+                    <ul>
+                        <li>Represents incremental revenue returned for every $1 of total marketing spend.</li>
+                        <li>For example, 130% means the campaign generates $1.30 in incremental revenue per $1 invested.</li>
+                        <li>Used as a directional indicator of how effectively ATL + BTL activity is driving incremental commercial impact (not profit).</li>
+                    </ul>
+                </div>
+
+<div class="assumptions-box" style="margin-top: 20px; background: #fefce8; border-color: #eab308;">
+                    <h4>Funnel Conversion Benchmarks</h4>
+                    <ul>
+                        <li><strong>Awareness Lift (35-55% typical):</strong> IPA Databank shows brand campaigns average 42-48% awareness lift. Nielsen Brand Effect studies show integrated campaigns drive 40-60% awareness lift with strong creative and media weight.</li>
+                        <li><strong>Consideration Rate (25-50% by category):</strong> Field & Binet research shows 20-35% of aware consumers actively consider. Health/wellness categories typically see 30-40% consideration rates (higher involvement, research-driven purchases). Premium/organic products: 40-50%.</li>
+                        <li><strong>Attention Rate (25-50%):</strong> System1 Group research shows campaigns with high creative quality achieve 40-55% attention rates. Average campaigns: 25-35%. Attention drives both awareness creation and consideration.</li>
+                        <li><strong>How to Adjust:</strong> Use brand tracking studies to measure your actual awareness and consideration rates. Update these inputs as campaign progresses to reflect real-world performance and improve forecast accuracy.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle section visibility
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('collapsed');
+        }
+
+        // Update slider value displays
+        function updateHaloLift() {
+            document.getElementById('haloLiftValue').textContent = document.getElementById('haloLift').value + '%';
+        }
+
+        function updateTrafficLift() {
+            document.getElementById('trafficLiftValue').textContent = document.getElementById('trafficLift').value + '%';
+        }
+
+        function updateCvrLift() {
+            document.getElementById('cvrLiftValue').textContent = document.getElementById('cvrLift').value + 'pp';
+        }
+
+        function updateBrandSearchLift() {
+            document.getElementById('brandSearchLiftValue').textContent = document.getElementById('brandSearchLift').value + '%';
+        }
+
+        function updateSamplingConversion() {
+            document.getElementById('samplingConversionValue').textContent = document.getElementById('samplingConversion').value + '%';
+        }
+
+        function updateSamplesDistributed() {
+            const value = parseInt(document.getElementById('samplesDistributed').value);
+            document.getElementById('samplesDistributedValue').textContent = value.toLocaleString();
+        }
+
+        function updateAttentionRate() {
+            document.getElementById('attentionRateValue').textContent = document.getElementById('attentionRate').value + '%';
+        }
+
+        function updateAwarenessLift() {
+            document.getElementById('awarenessLiftValue').textContent = document.getElementById('awarenessLift').value + '%';
+        }
+
+        function updateConsiderationRate() {
+            document.getElementById('considerationRateValue').textContent = document.getElementById('considerationRate').value + '%';
+        }
+
+        // Format currency
+        function formatCurrency(value) {
+            if (value >= 1000000) {
+                return '$' + (value / 1000000).toFixed(2) + 'M';
+            } else if (value >= 1000) {
+                return '$' + (value / 1000).toFixed(0) + 'K';
+            } else {
+                return '$' + value.toLocaleString();
+            }
+        }
+
+        // Format number
+        function formatNumber(value) {
+            if (value >= 1000000) {
+                return (value / 1000000).toFixed(2) + 'M';
+            } else if (value >= 1000) {
+                return (value / 1000).toFixed(0) + 'K';
+            } else {
+                return value.toLocaleString();
+            }
+        }
+
+        // Main calculation function
+        function calculate() {
+            // Get all input values
+            const totalInvestment = parseFloat(document.getElementById('totalInvestment').value) || 0;
+            const baseRevenue = parseFloat(document.getElementById('baseRevenue').value) || 0;
+            const siteVisitors = parseFloat(document.getElementById('siteVisitors').value) || 0;
+            const baseCVR = parseFloat(document.getElementById('baseCVR').value) / 100 || 0;
+            const aov = parseFloat(document.getElementById('aov').value) || 0;
+            
+            const trafficLift = parseFloat(document.getElementById('trafficLift').value) / 100 || 0;
+            const cvrLift = parseFloat(document.getElementById('cvrLift').value) / 100 || 0;
+            const brandSearchLift = parseFloat(document.getElementById('brandSearchLift').value) / 100 || 0;
+            const samplingConversion = parseFloat(document.getElementById('samplingConversion').value) / 100 || 0;
+            const samplesDistributed = parseFloat(document.getElementById('samplesDistributed').value) || 0;
+            const attentionRate = parseFloat(document.getElementById('attentionRate').value) / 100 || 0;
+            const haloLift = parseFloat(document.getElementById('haloLift').value) / 100 || 0;
+            const targetMarket = parseFloat(document.getElementById('targetMarket').value) || 3500000;
+            const awarenessLiftPct = parseFloat(document.getElementById('awarenessLift').value) || 45;
+            const considerationRate = parseFloat(document.getElementById('considerationRate').value) / 100 || 0.30;
+
+            // BTL Channel calculations
+            const metaBudget = parseFloat(document.getElementById('metaBudget').value) || 0;
+            const metaROAS = parseFloat(document.getElementById('metaROAS').value) || 0;
+            const googleBudget = parseFloat(document.getElementById('googleBudget').value) || 0;
+            const googleROAS = parseFloat(document.getElementById('googleROAS').value) || 0;
+            const emailBudget = parseFloat(document.getElementById('emailBudget').value) || 0;
+            const emailROI = parseFloat(document.getElementById('emailROI').value) || 0;
+            const influencerBudget = parseFloat(document.getElementById('influencerBudget').value) || 0;
+            const influencerROAS = parseFloat(document.getElementById('influencerROAS').value) || 0;
+            const tradeBudget = parseFloat(document.getElementById('tradeBudget').value) || 0;
+            const wwBudget = parseFloat(document.getElementById('wwBudget').value) || 0;
+
+            // BTL baseline revenue (before halo)
+            const metaBaselineRev = metaBudget * metaROAS;
+            const googleBaselineRev = googleBudget * googleROAS;
+            const emailBaselineRev = emailBudget * emailROI;
+            const influencerBaselineRev = influencerBudget * influencerROAS;
+            
+            const btlBaselineRevenue = metaBaselineRev + googleBaselineRev + emailBaselineRev + influencerBaselineRev;
+            const btlTotalSpend = metaBudget + googleBudget + emailBudget + influencerBudget + tradeBudget + wwBudget;
+            const btlUntrackedSpend = tradeBudget + wwBudget;
+            const btlBaselineROAS = btlBaselineRevenue / (btlTotalSpend - btlUntrackedSpend);
+
+            // BTL with halo effect
+            const metaHaloRev = metaBaselineRev * (1 + haloLift);
+            const googleHaloRev = googleBaselineRev * (1 + haloLift);
+            const emailHaloRev = emailBaselineRev * (1 + haloLift);
+            const influencerHaloRev = influencerBaselineRev * (1 + haloLift);
+            
+            const btlHaloRevenue = metaHaloRev + googleHaloRev + emailHaloRev + influencerHaloRev;
+            const btlHaloValue = btlHaloRevenue - btlBaselineRevenue;
+
+            // Update BTL displays
+            document.getElementById('metaBefore').textContent = formatCurrency(metaBaselineRev);
+            document.getElementById('metaAfter').textContent = formatCurrency(metaHaloRev);
+            document.getElementById('googleBefore').textContent = formatCurrency(googleBaselineRev);
+            document.getElementById('googleAfter').textContent = formatCurrency(googleHaloRev);
+            document.getElementById('emailBefore').textContent = formatCurrency(emailBaselineRev);
+            document.getElementById('emailAfter').textContent = formatCurrency(emailHaloRev);
+            document.getElementById('influencerBefore').textContent = formatCurrency(influencerBaselineRev);
+            document.getElementById('influencerAfter').textContent = formatCurrency(influencerHaloRev);
+
+            document.getElementById('btlTotalSpend').textContent = formatCurrency(btlTotalSpend);
+            document.getElementById('btlBaselineRevenue').textContent = formatCurrency(btlBaselineRevenue);
+            document.getElementById('btlHaloRevenue').textContent = formatCurrency(btlHaloRevenue);
+            document.getElementById('btlHaloValue').textContent = formatCurrency(btlHaloValue);
+            document.getElementById('btlBaselineROAS').textContent = btlBaselineROAS.toFixed(2) + 'x';
+            document.getElementById('btlUntrackedSpend').textContent = formatCurrency(btlUntrackedSpend);
+
+            // Media plan calculations
+            const uniqueReach = 1200000;
+            const avgFrequency = 9.4;
+            const totalImpressions = uniqueReach * avgFrequency;
+
+            document.getElementById('uniqueReach').textContent = formatNumber(uniqueReach);
+            document.getElementById('avgFrequency').textContent = avgFrequency.toFixed(1) + 'x';
+            document.getElementById('totalImpressions').textContent = formatNumber(totalImpressions);
+
+            // Funnel Stage 1: Reach
+            document.getElementById('funnelReach').textContent = formatNumber(uniqueReach);
+            document.getElementById('funnelReachPct').textContent = ((uniqueReach / targetMarket) * 100).toFixed(1) + '%';
+            document.getElementById('funnelImpressions').textContent = formatNumber(totalImpressions);
+
+            // Funnel Stage 2: Awareness
+            const peopleAware = uniqueReach * attentionRate;
+            const newAwareness = peopleAware * (awarenessLiftPct / 100);
+
+            document.getElementById('funnelAware').textContent = formatNumber(peopleAware);
+            document.getElementById('funnelAwarenessLift').textContent = awarenessLiftPct + '%';
+            document.getElementById('funnelNewAwareness').textContent = formatNumber(newAwareness);
+
+            // Funnel Stage 3: Consideration
+            const peopleConsidering = peopleAware * considerationRate;
+            const additionalTraffic = siteVisitors * trafficLift;
+            const brandSearches = additionalTraffic * brandSearchLift;
+
+            document.getElementById('funnelConsidering').textContent = formatNumber(peopleConsidering);
+            document.getElementById('funnelTraffic').textContent = formatNumber(additionalTraffic);
+            document.getElementById('funnelBrandSearches').textContent = formatNumber(brandSearches);
+
+            // Funnel Stage 4: Conversion
+            const newCVR = baseCVR + cvrLift;
+            const newCustomersFromTraffic = additionalTraffic * newCVR;
+            const samplingConversions = samplesDistributed * samplingConversion;
+
+            document.getElementById('funnelNewCustomers').textContent = formatNumber(newCustomersFromTraffic);
+            document.getElementById('funnelCVR').textContent = (newCVR * 100).toFixed(2) + '%';
+            document.getElementById('funnelSamplingConv').textContent = formatNumber(samplingConversions);
+
+            // Funnel Stage 5: Revenue Impact
+            const trafficRevenue = newCustomersFromTraffic * aov;
+            const samplingRevenue = samplingConversions * aov;
+            const totalDirectRevenue = trafficRevenue + samplingRevenue;
+
+            document.getElementById('funnelTrafficRevenue').textContent = formatCurrency(trafficRevenue);
+            document.getElementById('funnelSamplingRevenue').textContent = formatCurrency(samplingRevenue);
+            document.getElementById('funnelBTLHaloRevenue').textContent = formatCurrency(btlHaloValue);
+            document.getElementById('funnelTotalIncremental').textContent = formatCurrency(totalDirectRevenue + btlHaloValue);
+
+            // Campaign revenue breakdown
+            const incrementalRevenue = totalDirectRevenue + btlHaloValue;
+            const campaignRevenue = baseRevenue + incrementalRevenue;
+            const campaignROI = incrementalRevenue / totalInvestment;
+
+            // Update revenue breakdown
+            document.getElementById('revenueHalo').textContent = formatCurrency(btlHaloValue);
+            document.getElementById('revenueTraffic').textContent = formatCurrency(trafficRevenue);
+            document.getElementById('revenueSampling').textContent = formatCurrency(samplingRevenue);
+            document.getElementById('revenueTotalIncremental').textContent = formatCurrency(incrementalRevenue);
+            document.getElementById('revenueROI').textContent = campaignROI.toFixed(2) + 'x';
+
+            // Update summary
+            document.getElementById('summaryBaseRevenue').textContent = formatCurrency(baseRevenue);
+            document.getElementById('summaryCampaignRevenue').textContent = formatCurrency(campaignRevenue);
+            document.getElementById('summaryIncremental').textContent = formatCurrency(incrementalRevenue);
+            document.getElementById('summaryROI').textContent = campaignROI.toFixed(2) + 'x';
+
+            // Total marketing performance
+            const totalMarketingSpend = totalInvestment + btlTotalSpend;
+            const totalRevenue = campaignRevenue;
+            const blendedROAS = totalRevenue / totalMarketingSpend;
+            const marketingEfficiency = (incrementalRevenue / totalMarketingSpend) * 100;
+
+            document.getElementById('totalMarketingSpend').textContent = formatCurrency(totalMarketingSpend);
+            document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('blendedROAS').textContent = blendedROAS.toFixed(2) + 'x';
+            document.getElementById('marketingEfficiency').textContent = marketingEfficiency.toFixed(1) + '%';
+
+            // Spend allocation
+            const atlSpendPct = (totalInvestment / totalMarketingSpend) * 100;
+            const btlSpendPct = (btlTotalSpend / totalMarketingSpend) * 100;
+
+            document.getElementById('atlSpendPct').textContent = atlSpendPct.toFixed(1) + '%';
+            document.getElementById('btlSpendPct').textContent = btlSpendPct.toFixed(1) + '%';
+
+            // Revenue attribution
+            const btlRevenuePct = (baseRevenue / totalRevenue) * 100;
+            const haloRevenuePct = (btlHaloValue / totalRevenue) * 100;
+            const directRevenuePct = (totalDirectRevenue / totalRevenue) * 100;
+
+            document.getElementById('btlRevenuePct').textContent = btlRevenuePct.toFixed(1) + '%';
+            document.getElementById('haloRevenuePct').textContent = haloRevenuePct.toFixed(1) + '%';
+            document.getElementById('directRevenuePct').textContent = directRevenuePct.toFixed(1) + '%';
+        }
+
+        // Load scenario presets
+        function loadScenario(scenario) {
+            // Remove active class from all pills
+            document.querySelectorAll('.scenario-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            // Add active class to clicked pill
+            event.target.classList.add('active');
+
+            if (scenario === 'conservative') {
+                document.getElementById('trafficLift').value = 15;
+                document.getElementById('cvrLift').value = 0.2;
+                document.getElementById('haloLift').value = 10;
+                document.getElementById('brandSearchLift').value = 25;
+                document.getElementById('samplingConversion').value = 15;
+                document.getElementById('attentionRate').value = 25;
+            } else if (scenario === 'optimistic') {
+                document.getElementById('trafficLift').value = 40;
+                document.getElementById('cvrLift').value = 0.5;
+                document.getElementById('haloLift').value = 25;
+                document.getElementById('brandSearchLift').value = 60;
+                document.getElementById('samplingConversion').value = 30;
+                document.getElementById('attentionRate').value = 50;
+            } else if (scenario === 'realistic') {
+                document.getElementById('trafficLift').value = 25;
+                document.getElementById('cvrLift').value = 0.3;
+                document.getElementById('haloLift').value = 15;
+                document.getElementById('brandSearchLift').value = 40;
+                document.getElementById('samplingConversion').value = 20;
+                document.getElementById('attentionRate').value = 35;
+            }
+            // Custom scenario doesn't change values
+
+            // Update all slider displays
+            updateTrafficLift();
+            updateCvrLift();
+            updateHaloLift();
+            updateBrandSearchLift();
+            updateSamplingConversion();
+            updateAttentionRate();
+            updateAwarenessLift();
+            updateConsiderationRate();
+            calculate();
+        }
+
+        // Initialize on page load
+        window.onload = function() {
+            updateHaloLift();
+            updateTrafficLift();
+            updateCvrLift();
+            updateBrandSearchLift();
+            updateSamplingConversion();
+            updateSamplesDistributed();
+            updateAttentionRate();
+            updateAwarenessLift();
+            updateConsiderationRate();
+            calculate();
+        };
+    </script>
+</body>
+</html>
